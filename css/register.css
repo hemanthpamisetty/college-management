@@ -1,0 +1,42 @@
+form{
+    font-style:oblique;
+}
+.card-body{
+    font-family: comforta;
+}
+body{
+    background-image: url(../images/image2.png); position: relative;
+    width: 100%;
+    height: 50%;  
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    border-radius: 0px;
+    overflow: hidden;
+}
+
+/* ============================= */
+/* Mobile Responsive - Login/Register */
+/* ============================= */
+
+@media (max-width: 768px) {
+
+    body {
+        min-height: 100vh;      /* Full screen */
+        background-position: center top;
+    }
+
+    .card {
+        width: 90% !important; /* Fit mobile screen */
+        margin: auto;
+    }
+
+    .card-body {
+        padding: 20px;
+        font-size: 14px;
+    }
+
+    form {
+        font-style: normal;    /* Better readability on mobile */
+    }
+}

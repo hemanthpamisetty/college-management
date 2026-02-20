@@ -1,0 +1,34 @@
+
+   
+body{
+    background-image: url(../images/image2.png); position: relative;
+    width: 100%;
+    height: 50%;  
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    border-radius: 0px;
+    overflow: hidden;
+}
+
+#bside{
+    background-color: bisque;
+}
+
+/* ============================= */
+/* Mobile Background Fix */
+/* ============================= */
+
+@media (max-width: 768px) {
+
+    body {
+        min-height: 100vh;          /* Full screen height */
+        background-position: center top;
+        background-size: cover;
+    }
+
+    #bside {
+        padding: 10px;
+    }
+}
+

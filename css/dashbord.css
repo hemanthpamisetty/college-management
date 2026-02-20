@@ -1,0 +1,149 @@
+#display{
+    display: flex;
+    justify-content: space-between;
+    background: none;
+    align-items: center;
+    gap: 10px;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+body{
+    background-color: #7c7877;
+}
+.list{
+    margin-top: 10%;
+    margin-bottom: 10%;
+   
+}
+nav.services{
+    background: none;
+}
+nav.services p{
+    background: none;
+    color: #000000;
+}
+.dept{
+   
+    align-items: center;
+}
+.btn-primary{
+    color: #f7f2f2;
+    border-radius: 40%;
+    font-size: 150%;
+    right: 10%;
+}
+.dropdown-item {
+    margin: 5px 10px;
+
+}
+.links li {
+    position: relative;
+    align-items: center;
+}
+.custom-navbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 35px;
+    background: linear-gradient(90deg, #ba3e00, #cc8c6d);
+    align-items: center;
+}
+
+.dropdown-menu {
+    z-index: 2000;
+    background-color: rgb(244, 103, 38);
+    margin-left: 0px;
+}
+.footer-section .media {
+    display:inline ;
+   
+}
+
+/* ================= CARDS HOVER EFFECT ================= */
+
+.card {
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+/* Card lift + shadow */
+.card:hover {
+    transform: translateY(-12px) scale(1.02);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
+}
+
+/* Image zoom on hover */
+.card img {
+    transition: transform 0.4s ease;
+}
+
+.card:hover img {
+    transform: scale(1.08);
+}
+
+/* Title color change */
+.card:hover .card-title {
+    color: #f16c07;
+}
+
+/* Button animation */
+.card .btn {
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.card:hover .btn {
+    background: linear-gradient(90deg, #ff512f, #dd2476);
+    transform: scale(1.05);
+}
+
+
+/* ============================= */
+/* Mobile Responsive - Services */
+/* ============================= */
+
+@media (max-width: 768px) {
+
+    #display {
+        flex-direction: column;     /* Stack cards */
+        margin-left: 5%;
+        margin-right: 5%;
+        gap: 20px;
+    }
+
+    .list {
+        margin-top: 5%;
+        margin-bottom: 5%;
+    }
+
+    nav.services,
+    nav.branch,
+    nav.update,
+    nav.clginfo {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .dept {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn-primary {
+        font-size: 100%;           /* Normal size */
+        padding: 10px 16px;
+        border-radius: 25px;
+    }
+     .navbar-nav {
+        text-align: center;
+        background: #ba3e00;
+        padding: 10px 0;
+    }
+
+    .nav-link {
+        padding: 10px;
+    }
+}
+
+
+
