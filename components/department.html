@@ -1,168 +1,254 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Departments | RGMCET</title>
-    <link rel="icon" type="image/clglogo" style="size: 16px;" href="/images/clglogo.png">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    
-    <link rel="stylesheet" href="../css/department.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="RGMCET Departments — Explore all engineering and science departments with programs, faculty, and details.">
+  <title>Departments — RGMCET</title>
+  <link rel="icon" href="/images/clglogo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/department.css">
+  <style>
+    /* Inline styles for back button in navbar area */
+    .dept-topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 24px;
+      background: rgba(15,23,42,.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .dept-topbar-logo {
+      font-size: 18px; font-weight: 800;
+      background: linear-gradient(135deg,#a5b4fc,#67e8f9);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; display: flex; align-items: center; gap: 8px;
+    }
+    .dept-topbar-logo i { -webkit-text-fill-color: #67e8f9; }
+    .dept-nav-links { display: flex; align-items: center; gap: 12px; }
+    .dept-nav-links a {
+      color: rgba(255,255,255,.75); font-size: 14px; font-weight: 500; text-decoration: none;
+      padding: 8px 16px; border-radius: 999px; transition: all .3s;
+    }
+    .dept-nav-links a:hover { color:#fff; background:rgba(255,255,255,.1); }
+    .dept-nav-links .back-btn {
+      background: rgba(79,70,229,.2); border: 1px solid rgba(79,70,229,.4); color: #a5b4fc;
+    }
+    .dept-nav-links .back-btn:hover { background: rgba(79,70,229,.4); color: #fff; }
+  </style>
 </head>
-
 <body>
 
-    <div class="title">
-        <img src="../images/clglogo.png" alt="collegr_logo" class="logo">
-        <h4>RAJEEVE GANDHI MEMORIAL COLLEGE OF ENGINEERING AND TECHNOLOGY</h4>
-        <h5>(Autonomous)</h5>
-        <h5>NANDYAL-51801,NANDYAL(DIST),A.P.,INDIA</h5>
-    </div>
-    
-    <!-- ===== PAGE HEADER ===== -->
-    <div class="dept-header text-center">
-        <h1>Our Departments</h1>
-        <p>Explore academic departments and programs</p>
-    </div>
-
-    
-    <!-- ===== DEPARTMENTS SECTION ===== -->
-    <div class="container width-150 height-200">
-            <div class="dept-wrapper">
-            <button class="nav-btn left" onclick="scrollLeft()"></button>
-
-            <div class="slides">
-                <!-- CSE -->
-                    <div class="">
-                        <div class="dept-card">
-                            <img src="../images/cse.png" alt="CSE">
-                            <h3>CSE</h3>
-                            <p>Computer Science & Engineering focuses on software, AI, and computing technologies.</p>
-                            <a href="cse.html" class="btn btn-primary">View Details</a>
-                        </div>
-                    </div>
-
-                    <!-- ECE -->
-                    <div class="">
-                        <div class="dept-card">
-                            <img src="../images/ece.png" alt="ECE">
-                            <h3>ECE</h3>
-                            <p>Electronics & Communication Engineering deals with communication systems.</p>
-                            <a href="ece.html" class="btn btn-primary">View Details</a>
-                        </div>
-                    </div>
-
-                    <!-- EEE -->
-                    <div class="">
-                        <div class="dept-card">
-                            <img src="../images/eee.png" alt="EEE">
-                            <h3>EEE</h3>
-                            <p>Electrical & Electronics Engineering focuses on power and electrical systems.</p>
-                            <a href="eee.html" class="btn btn-primary">View Details</a>
-                        </div>
-                    </div>
-                    
-
-                    <!-- AI & ML -->
-                    <div class="">
-                        <div class="dept-card">
-                            <img src="../images/aiml.png" alt="AI">
-                            <h3>CSE (AI & ML)</h3>
-                            <p>Artificial Intelligence & Data Science focuses on ML, AI, and analytics.</p>
-                            <a href="ai.html" class="btn btn-primary">View Details</a>
-                        </div>
-                    </div>
-
-                    <!-- AI & ML -->
-                    <div class="">
-                        <div class="dept-card">
-                            <img src="../images/ds.png" alt="DS">
-                            <h3>CSE (DS)</h3>
-                            <p>Artificial Intelligence & Data Science focuses on ML, AI, and analytics.</p>
-                            <a href="ai.html" class="btn btn-primary">View Details</a>
-                        </div>
-                    </div>
-                    <!-- cyber security  -->
-                    <div class="">
-                        <div class="dept-card">
-                            <img src="../images/cs.png" alt="CSE (cyber Security)">
-                            <h3>CSE (CS)</h3>
-                            <p>Artificial Intelligence & Data Science focuses on ML, AI, and analytics.</p>
-                            <a href="ai.html" class="btn btn-primary">View Details</a>
-                        </div>
-                    </div>
-                    <!-- MECH -->
-                    <div class="">
-                        <div class="dept-card">
-                            <img src="../images/mech.png" alt="MECH">
-                            <h3>Mech</h3>
-                            <p>Mechanical Engineering deals with design, manufacturing, and automation.</p>
-                            <a href="mech.html" class="btn btn-primary">View Details</a>
-                        </div>
-                    </div>
-
-                    <!-- CIVIL -->
-                    <div class="">
-                        <div class="dept-card">
-                            <img src="../images/civil.png" alt="CIVIL">
-                            <h3>Civil</h3>
-                            <p>Civil Engineering focuses on infrastructure, construction, and planning.</p>
-                            <a href="civil.html" class="btn btn-primary">View Details</a>
-                        </div>
-                    </div>
-                    <!-- Mathematics -->
-                    <div class="">
-                        <div class="dept-card">
-                            <img src="../images/math.png" alt="Mathematics">
-                            <h3>Mathematics</h3>
-                            <p>Artificial Intelligence & Data Science focuses on ML, AI, and analytics.</p>
-                            <a href="ai.html" class="btn btn-primary">View Details</a>
-                        </div>
-                    </div>
-
-                    <!-- English -->
-                    <div class="">
-                        <div class="dept-card">
-                            <img src="../images/english.png" alt="English">
-                            <h3>English</h3>
-                            <p>Artificial Intelligence & Data Science focuses on ML, AI, and analytics.</p>
-                            <a href="ai.html" class="btn btn-primary">View Details</a>
-                        </div>
-                    </div>
-                    <!-- Physics -->
-                    <div class="">
-                        <div class="dept-card">
-                            <img src="../images/phy.png" alt="Physics">
-                            <h3>Physics</h3>
-                            <p>Artificial Intelligence & Data Science focuses on ML, AI, and analytics.</p>
-                            <a href="ai.html" class="btn btn-primary">View Details</a>
-                        </div>
-                    </div>
-
-                    <!-- Chemistery -->
-                    <div class="">
-                        <div class="dept-card">
-                            <img src="../images/chem.png" alt="Chemistery">
-                            <h3>Chemistery</h3>
-                            <p>Artificial Intelligence & Data Science focuses on ML, AI, and analytics.</p>
-                            <a href="ai.html" class="btn btn-primary">View Details</a>
-                        </div>
-                    </div>
-            </div>
-
-         <button class="nav-btn right" onclick="scrollRight()">&#10095;</button>
+<!-- ===== TOP NAV BAR ===== -->
+<div class="dept-topbar">
+  <div class="dept-topbar-logo">
+    <i class="fa-solid fa-graduation-cap"></i> RGMCET
+  </div>
+  <div class="dept-nav-links">
+    <a href="../components/interface.html"><i class="fa-solid fa-house"></i> Home</a>
+    <a href="../components/dashbord.html"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+    <a href="../components/interface.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back</a>
+  </div>
 </div>
-           
+
+<!-- ===== PAGE HERO ===== -->
+<div class="dept-page-hero" data-aos="fade-down">
+  <h1>Our Departments</h1>
+  <p>World-class engineering and science programs designed to shape tomorrow's innovators at RGMCET.</p>
+</div>
+
+<!-- ===== FILTER TABS ===== -->
+<div class="filter-tabs" data-aos="fade-up">
+  <button class="filter-tab active" data-filter="all" onclick="filterDepts(this,'all')">All Departments</button>
+  <button class="filter-tab" data-filter="engineering" onclick="filterDepts(this,'engineering')">Engineering</button>
+  <button class="filter-tab" data-filter="cs" onclick="filterDepts(this,'cs')">Computer Science</button>
+  <button class="filter-tab" data-filter="science" onclick="filterDepts(this,'science')">Sciences</button>
+</div>
+
+<!-- ===== DEPT CARDS GRID ===== -->
+<div class="dept-section">
+  <div class="dept-grid" id="deptGrid">
+
+    <!-- CSE -->
+    <div class="dept-card" data-category="cs engineering" data-aos="fade-up" data-aos-delay="0">
+      <div class="dept-card-img">
+        <img src="../images/cse.png" alt="CSE Department">
+        <div class="dept-card-badge">B.Tech</div>
+      </div>
+      <div class="dept-card-body">
+        <div class="dept-card-icon"><i class="fa-solid fa-laptop-code"></i></div>
+        <h3>Computer Science &amp; Engineering</h3>
+        <p>Focuses on software development, algorithms, data structures, AI, and modern computing technologies. One of our flagship programs.</p>
+        <div class="dept-card-footer">
+          <span><i class="fa-solid fa-users" style="color:#4F46E5;"></i> 240 Students</span>
+          <a href="#" class="btn-dept">View Details <i class="fa-solid fa-arrow-right"></i></a>
         </div>
+      </div>
     </div>
-    
-    <script src="../components/department.js"></script>
+
+    <!-- ECE -->
+    <div class="dept-card" data-category="engineering" data-aos="fade-up" data-aos-delay="60">
+      <div class="dept-card-img">
+        <img src="../images/ece.png" alt="ECE Department">
+        <div class="dept-card-badge">B.Tech</div>
+      </div>
+      <div class="dept-card-body">
+        <div class="dept-card-icon"><i class="fa-solid fa-microchip"></i></div>
+        <h3>Electronics &amp; Communication Engineering</h3>
+        <p>Deals with communication systems, VLSI design, embedded systems, and signal processing technologies.</p>
+        <div class="dept-card-footer">
+          <span><i class="fa-solid fa-users" style="color:#4F46E5;"></i> 180 Students</span>
+          <a href="#" class="btn-dept">View Details <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- EEE -->
+    <div class="dept-card" data-category="engineering" data-aos="fade-up" data-aos-delay="120">
+      <div class="dept-card-img">
+        <img src="../images/eee.png" alt="EEE Department">
+        <div class="dept-card-badge">B.Tech</div>
+      </div>
+      <div class="dept-card-body">
+        <div class="dept-card-icon"><i class="fa-solid fa-bolt"></i></div>
+        <h3>Electrical &amp; Electronics Engineering</h3>
+        <p>Focuses on power systems, electrical machines, control systems, and renewable energy technologies.</p>
+        <div class="dept-card-footer">
+          <span><i class="fa-solid fa-users" style="color:#4F46E5;"></i> 120 Students</span>
+          <a href="#" class="btn-dept">View Details <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI & ML -->
+    <div class="dept-card" data-category="cs engineering" data-aos="fade-up" data-aos-delay="180">
+      <div class="dept-card-img">
+        <img src="../images/aiml.png" alt="CSE AI & ML">
+        <div class="dept-card-badge">B.Tech</div>
+      </div>
+      <div class="dept-card-body">
+        <div class="dept-card-icon"><i class="fa-solid fa-brain"></i></div>
+        <h3>CSE (Artificial Intelligence &amp; ML)</h3>
+        <p>An interdisciplinary program combining machine learning, neural networks, natural language processing, and computer vision.</p>
+        <div class="dept-card-footer">
+          <span><i class="fa-solid fa-users" style="color:#4F46E5;"></i> 120 Students</span>
+          <a href="#" class="btn-dept">View Details <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- DS -->
+    <div class="dept-card" data-category="cs engineering" data-aos="fade-up" data-aos-delay="240">
+      <div class="dept-card-img">
+        <img src="../images/ds.png" alt="CSE Data Science">
+        <div class="dept-card-badge">B.Tech</div>
+      </div>
+      <div class="dept-card-body">
+        <div class="dept-card-icon"><i class="fa-solid fa-chart-scatter"></i></div>
+        <h3>CSE (Data Science)</h3>
+        <p>Focuses on big data analytics, data visualization, statistical modelling, and business intelligence applications.</p>
+        <div class="dept-card-footer">
+          <span><i class="fa-solid fa-users" style="color:#4F46E5;"></i> 120 Students</span>
+          <a href="#" class="btn-dept">View Details <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cyber Security -->
+    <div class="dept-card" data-category="cs engineering" data-aos="fade-up" data-aos-delay="300">
+      <div class="dept-card-img">
+        <img src="../images/cs.png" alt="CSE Cyber Security">
+        <div class="dept-card-badge">B.Tech</div>
+      </div>
+      <div class="dept-card-body">
+        <div class="dept-card-icon"><i class="fa-solid fa-shield-halved"></i></div>
+        <h3>CSE (Cyber Security)</h3>
+        <p>Covers ethical hacking, network security, cryptography, digital forensics, and secure software development.</p>
+        <div class="dept-card-footer">
+          <span><i class="fa-solid fa-users" style="color:#4F46E5;"></i> 60 Students</span>
+          <a href="#" class="btn-dept">View Details <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mechanical -->
+    <div class="dept-card" data-category="engineering" data-aos="fade-up" data-aos-delay="360">
+      <div class="dept-card-img">
+        <img src="../images/mech.png" alt="Mechanical">
+        <div class="dept-card-badge">B.Tech</div>
+      </div>
+      <div class="dept-card-body">
+        <div class="dept-card-icon"><i class="fa-solid fa-gears"></i></div>
+        <h3>Mechanical Engineering</h3>
+        <p>Covers thermodynamics, design, manufacturing, automation, robotics, and industrial engineering processes.</p>
+        <div class="dept-card-footer">
+          <span><i class="fa-solid fa-users" style="color:#4F46E5;"></i> 120 Students</span>
+          <a href="#" class="btn-dept">View Details <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Civil -->
+    <div class="dept-card" data-category="engineering" data-aos="fade-up" data-aos-delay="420">
+      <div class="dept-card-img">
+        <img src="../images/civil.png" alt="Civil">
+        <div class="dept-card-badge">B.Tech</div>
+      </div>
+      <div class="dept-card-body">
+        <div class="dept-card-icon"><i class="fa-solid fa-helmet-safety"></i></div>
+        <h3>Civil Engineering</h3>
+        <p>Focuses on structural engineering, construction management, environmental engineering, transportation, and urban planning.</p>
+        <div class="dept-card-footer">
+          <span><i class="fa-solid fa-users" style="color:#4F46E5;"></i> 120 Students</span>
+          <a href="#" class="btn-dept">View Details <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mathematics -->
+    <div class="dept-card" data-category="science" data-aos="fade-up" data-aos-delay="480">
+      <div class="dept-card-img">
+        <img src="../images/math.png" alt="Mathematics">
+        <div class="dept-card-badge">Dept.</div>
+      </div>
+      <div class="dept-card-body">
+        <div class="dept-card-icon"><i class="fa-solid fa-square-root-variable"></i></div>
+        <h3>Mathematics</h3>
+        <p>Applied mathematics, numerical methods, probability, statistics, and their applications in engineering and technology.</p>
+        <div class="dept-card-footer">
+          <span><i class="fa-solid fa-users" style="color:#4F46E5;"></i> Faculty Dept.</span>
+          <a href="#" class="btn-dept">View Details <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== MINI FOOTER ===== -->
+<footer style="background:linear-gradient(135deg,#1e1b4b,#0f172a);color:rgba(255,255,255,.6);
+               text-align:center;padding:24px;font-size:13px;">
+  © 2026 RGMCET — All Rights Reserved |
+  <a href="../components/interface.html" style="color:#06B6D4;text-decoration:none;">Back to Home</a>
+</footer>
+
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script src="../components/department.js"></script>
+<script>
+  AOS.init({ duration: 650, once: true, offset: 60 });
+
+  // Filter departments
+  function filterDepts(btn, category) {
+    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.dept-card').forEach(card => {
+      const cats = card.dataset.category || '';
+      card.style.display = (category === 'all' || cats.includes(category)) ? '' : 'none';
+    });
+  }
+</script>
 </body>
-
 </html>
-
-
-
-
- 

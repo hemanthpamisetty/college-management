@@ -1,187 +1,375 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>RGMCET Dashboard</title>
-
-    <link rel="icon" type="image/clglogo" href="/images/clglogo.png">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../css/styles.css">
-    <link rel="stylesheet" href="../css/dashbord.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="RGMCET Student Dashboard — View your academic records, attendance, and campus updates.">
+  <title>Dashboard — RGMCET Student Portal</title>
+  <link rel="icon" href="/images/clglogo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../css/dashbord.css">
 </head>
-
 <body>
-    <!-- ================= SESSION PROTECTION ================= -->
-    <script>
-        if (localStorage.getItem("isLoggedIn") !== "true") {
-            window.location.href = "login.html";
-        }
-    </script>
 
-    <!-- ================= HEADER ================= -->
-    <div class="title">
-        <img src="../images/clglogo.png" alt="college_logo" class="logo">
-        <h4>RAJEEVE GANDHI MEMORIAL COLLEGE OF ENGINEERING AND TECHNOLOGY</h4>
-        <h5>(Autonomous)</h5>
-        <h5>NANDYAL-51801, NANDYAL(DIST), A.P., INDIA</h5>
+<!-- ===== Session Guard ===== -->
+<script>
+  if (localStorage.getItem('isLoggedIn') !== 'true') {
+    window.location.href = 'login.html';
+  }
+</script>
+
+<!-- ===== SIDEBAR ===== -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <i class="fa-solid fa-graduation-cap" style="font-size:24px;color:#67e8f9;"></i>
+    <div class="sidebar-logo">RGM<span>CET</span></div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-group-title">Main</div>
+    <a href="#" class="nav-item active" id="nav-dashboard">
+      <i class="fa-solid fa-house"></i> Dashboard
+    </a>
+    <a href="../components/department.html" class="nav-item" id="nav-departments">
+      <i class="fa-solid fa-building-columns"></i> Departments
+    </a>
+    <a href="#" class="nav-item" id="nav-services">
+      <i class="fa-solid fa-grid-2"></i> Services
+    </a>
+
+    <div class="nav-group-title">Academics</div>
+    <a href="#" class="nav-item" id="nav-schedule">
+      <i class="fa-solid fa-calendar-days"></i> Timetable
+    </a>
+    <a href="#" class="nav-item" id="nav-attendance">
+      <i class="fa-solid fa-clipboard-check"></i> Attendance
+      <span class="nav-badge">New</span>
+    </a>
+    <a href="#" class="nav-item" id="nav-results">
+      <i class="fa-solid fa-chart-bar"></i> Results
+    </a>
+    <a href="#" class="nav-item" id="nav-exams">
+      <i class="fa-solid fa-file-pen"></i> Examinations
+    </a>
+
+    <div class="nav-group-title">Campus</div>
+    <a href="#" class="nav-item" id="nav-events">
+      <i class="fa-solid fa-calendar-star"></i> Events
+    </a>
+    <a href="#" class="nav-item" id="nav-library">
+      <i class="fa-solid fa-book"></i> Library
+    </a>
+    <a href="#" class="nav-item" id="nav-fees">
+      <i class="fa-solid fa-receipt"></i> Fee Portal
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="sidebar-user" id="sidebar-user-btn">
+      <div class="sidebar-avatar" id="userAvatarSidebar">S</div>
+      <div class="sidebar-user-info">
+        <div class="sidebar-user-name" id="sidebarUserName">Student</div>
+        <div class="sidebar-user-role">B.Tech Student</div>
+      </div>
+      <i class="fa-solid fa-ellipsis-vertical" style="color:rgba(255,255,255,.4);font-size:14px;"></i>
+    </div>
+  </div>
+</aside>
+
+<!-- Sidebar overlay for mobile -->
+<div id="sidebarOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:199;"
+  onclick="closeSidebar()"></div>
+
+<!-- ===== MAIN CONTENT ===== -->
+<div class="main">
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <div>
+        <div class="topbar-title" id="topbarTitle">Dashboard</div>
+        <div class="topbar-sub">Welcome back, <span id="topbarStudent">Student</span>!</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <button class="topbar-icon-btn" title="Search" aria-label="Search">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </button>
+      <button class="topbar-icon-btn" title="Notifications" aria-label="Notifications">
+        <i class="fa-solid fa-bell"></i>
+        <span class="notif-dot"></span>
+      </button>
+      <button class="topbar-icon-btn" id="darkToggleBtn" title="Dark mode" aria-label="Toggle dark mode">
+        <i class="fa-solid fa-circle-half-stroke"></i>
+      </button>
+      <div style="display:flex;align-items:center;gap:8px;padding:0 4px;">
+        <div class="topbar-avatar" id="userAvatarTop">S</div>
+        <div>
+          <div class="topbar-user-name" id="topbarUserName">Student</div>
+          <div class="topbar-user-role">B.Tech</div>
+        </div>
+      </div>
+      <!-- Account Dropdown -->
+      <div style="position:relative;">
+        <button class="topbar-icon-btn" id="accountMenuBtn" aria-label="Account menu">
+          <i class="fa-solid fa-chevron-down"></i>
+        </button>
+        <div id="accountDropdown" style="
+          display:none;position:absolute;right:0;top:calc(100% + 8px);
+          background:#fff;border:1px solid rgba(79,70,229,.12);
+          border-radius:14px;padding:8px;min-width:200px;
+          box-shadow:0 20px 60px rgba(0,0,0,.12);z-index:300;
+        ">
+          <a href="#" style="display:flex;align-items:center;gap:10px;padding:10px 12px;
+             border-radius:10px;color:#0f172a;font-size:14px;font-weight:500;text-decoration:none;"
+             onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='none'">
+            <i class="fa-solid fa-user" style="color:#4F46E5;width:18px;"></i> View Profile
+          </a>
+          <a href="#" style="display:flex;align-items:center;gap:10px;padding:10px 12px;
+             border-radius:10px;color:#0f172a;font-size:14px;font-weight:500;text-decoration:none;"
+             onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='none'">
+            <i class="fa-solid fa-key" style="color:#06B6D4;width:18px;"></i> Change Password
+          </a>
+          <hr style="border:none;border-top:1px solid #f1f5f9;margin:6px 0;">
+          <a href="../components/interface.html" onclick="logout()"
+             style="display:flex;align-items:center;gap:10px;padding:10px 12px;
+             border-radius:10px;color:#ef4444;font-size:14px;font-weight:500;text-decoration:none;"
+             onmouseover="this.style.background='#fef2f2'" onmouseout="this.style.background='none'">
+            <i class="fa-solid fa-arrow-right-from-bracket" style="width:18px;"></i> Logout
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page Body -->
+  <main class="page-body">
+
+    <!-- Welcome Banner -->
+    <div class="welcome-banner">
+      <div>
+        <h2>Good day, <span id="bannerName">Student</span>! 👋</h2>
+        <p>You have <strong>3 upcoming events</strong> and <strong>1 new notification</strong> waiting for you.</p>
+      </div>
+      <a href="../components/department.html" class="welcome-btn">
+        <i class="fa-solid fa-building-columns"></i> &nbsp;View Departments
+      </a>
     </div>
 
-    <!-- ================= NAVBAR ================= -->
-    <div class="custom-navbar">
-    <nav class="clogo"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="35" fill="currentColor" class="bi bi-mortarboard" viewBox="0 0 16 16">
-        <path d="M8.211 2.047a.5.5 0 0 0-.422 0l-7.5 3.5a.5.5 0 0 0 .025.917l7.5 3a.5.5 0 0 0 .372 0L14 7.14V13a1 1 0 0 0-1 1v2h3v-2a1 1 0 0 0-1-1V6.739l.686-.275a.5.5 0 0 0 .025-.917zM8 8.46 1.758 5.965 8 3.052l6.242 2.913z"/>
-        <path d="M4.176 9.032a.5.5 0 0 0-.656.327l-.5 1.7a.5.5 0 0 0 .294.605l4.5 1.8a.5.5 0 0 0 .372 0l4.5-1.8a.5.5 0 0 0 .294-.605l-.5-1.7a.5.5 0 0 0-.656-.327L8 10.466zm-.068 1.873.22-.748 3.496 1.311a.5.5 0 0 0 .352 0l3.496-1.311.22.748L8 12.46z"/>
-            </svg>RGMCET</nav>
-    <ul class="links">
-        <li><a href="../components/dashbord.html"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="35" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16">
-            <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 
-            .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z"/>
-            </svg>Home</a></li>
-        <li><a href="#">Student Services</a></li>
-        <li><a href="../components/department.html">Departments</a></li>
+    <!-- Stat Cards -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-icon indigo"><i class="fa-solid fa-book-open"></i></div>
+        <div>
+          <div class="stat-value">6</div>
+          <div class="stat-label">Active Courses</div>
+          <div class="stat-delta up"><i class="fa-solid fa-arrow-up"></i> +1 this semester</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon cyan"><i class="fa-solid fa-clipboard-check"></i></div>
+        <div>
+          <div class="stat-value">87%</div>
+          <div class="stat-label">Attendance</div>
+          <div class="stat-delta up"><i class="fa-solid fa-arrow-up"></i> Above required 75%</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon green"><i class="fa-solid fa-star"></i></div>
+        <div>
+          <div class="stat-value">8.4</div>
+          <div class="stat-label">Current CGPA</div>
+          <div class="stat-delta up"><i class="fa-solid fa-arrow-up"></i> +0.2 from last sem</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon amber"><i class="fa-solid fa-calendar-check"></i></div>
+        <div>
+          <div class="stat-value">3</div>
+          <div class="stat-label">Upcoming Events</div>
+          <div class="stat-delta" style="color:#f59e0b;"><i class="fa-solid fa-calendar"></i> Next: May 12</div>
+        </div>
+      </div>
+    </div>
 
-        <!-- Account Dropdown -->
-         
-        <li class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" style="background-color:#cc8c6d;"
-                    type="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="35" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
-                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
-                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
-                    </svg> Account
-            </button>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="35" fill="currentColor" class="bi bi-person-lines-fill" viewBox="0 0 16 16">
-                <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5m.5 2.5a.5.5 0 0 0 0 
-                1h4a.5.5 0 0 0 0-1zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1z"/>
-                   </svg>View Profile</a></li>
-                <li><a class="dropdown-item" href="#"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="35" margin-left="20px" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
-                 <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9"/>
-                 <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z"/>
-                 </svg>Password Change</a></li>
-                <li><a class="dropdown-item" href="interface.html" onclick="logout()"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="35" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5
-                 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"/>
-                <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/>
-                </svg>Logout</a></li>
-                
-            </ul>
-        </li>
-    </ul>
+    <!-- Quick Actions -->
+    <div class="section-label">Quick Access</div>
+    <div class="quick-grid">
+      <a href="../components/department.html" class="quick-card">
+        <div class="quick-icon"><i class="fa-solid fa-building-columns"></i></div>
+        <h4>Departments</h4>
+        <p>Browse all academic branches</p>
+      </a>
+      <a href="#" class="quick-card">
+        <div class="quick-icon"><i class="fa-solid fa-calendar-days"></i></div>
+        <h4>Timetable</h4>
+        <p>View your class schedule</p>
+      </a>
+      <a href="#" class="quick-card">
+        <div class="quick-icon"><i class="fa-solid fa-chart-bar"></i></div>
+        <h4>Results</h4>
+        <p>Check semester grades</p>
+      </a>
+      <a href="#" class="quick-card">
+        <div class="quick-icon"><i class="fa-solid fa-receipt"></i></div>
+        <h4>Fee Portal</h4>
+        <p>View &amp; pay college fees</p>
+      </a>
+      <a href="#" class="quick-card">
+        <div class="quick-icon"><i class="fa-solid fa-file-pen"></i></div>
+        <h4>Examinations</h4>
+        <p>Hall tickets &amp; schedules</p>
+      </a>
+      <a href="#" class="quick-card">
+        <div class="quick-icon"><i class="fa-solid fa-book"></i></div>
+        <h4>Library</h4>
+        <p>Search books &amp; e-resources</p>
+      </a>
+    </div>
+
+    <!-- Two-column: Activity + Announcements -->
+    <div class="two-col">
+      <div class="dash-card">
+        <div class="dash-card-title"><i class="fa-solid fa-clock-rotate-left" style="color:#4F46E5;margin-right:8px;"></i>Recent Activity</div>
+        <div class="activity-list">
+          <div class="activity-item">
+            <div class="activity-dot green"></div>
+            <div class="activity-text">You logged in successfully</div>
+            <div class="activity-time">Just now</div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-dot blue"></div>
+            <div class="activity-text">Attendance updated — Unit 3 submission</div>
+            <div class="activity-time">2h ago</div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-dot amber"></div>
+            <div class="activity-text">Exam schedule released for Semester IV</div>
+            <div class="activity-time">Yesterday</div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-dot green"></div>
+            <div class="activity-text">Mid-term result published — 82/100</div>
+            <div class="activity-time">3 days ago</div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-dot blue"></div>
+            <div class="activity-text">Library book borrowed — Data Structures</div>
+            <div class="activity-time">5 days ago</div>
+          </div>
+        </div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-card-title"><i class="fa-solid fa-bullhorn" style="color:#06B6D4;margin-right:8px;"></i>Announcements</div>
+        <div class="activity-list">
+          <div class="activity-item">
+            <div class="activity-dot blue"></div>
+            <div class="activity-text"><strong>Tech Fest 2026</strong> — Registrations open till May 8.</div>
+            <div class="activity-time">May 1</div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-dot amber"></div>
+            <div class="activity-text"><strong>Semester End Exams</strong> begin June 20, 2026.</div>
+            <div class="activity-time">Apr 28</div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-dot green"></div>
+            <div class="activity-text"><strong>Placement Drive</strong> — TCS &amp; Infosys on May 24.</div>
+            <div class="activity-time">Apr 25</div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-dot blue"></div>
+            <div class="activity-text"><strong>Holiday</strong> — May 19 is declared a college holiday.</div>
+            <div class="activity-time">Apr 20</div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-dot green"></div>
+            <div class="activity-text"><strong>Cultural Fest Utsav 2026</strong> — June 6–8.</div>
+            <div class="activity-time">Apr 18</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
 </div>
 
+<!-- Scripts -->
+<script src="../components/security.js"></script>
+<script>
+  // ---- Load student name ----
+  const regNo = localStorage.getItem('regNo') || 'Student';
+  const initial = regNo.charAt(0).toUpperCase();
+  ['userAvatarSidebar','userAvatarTop'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = initial;
+  });
+  ['sidebarUserName','topbarUserName','topbarStudent','bannerName'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = regNo;
+  });
 
-    <!-- ================= HERO SECTION ================= -->
-    <div class="hero">
-        <img src="../images/image2.png" alt="college_bg" class="backimg">
-        <div class="content">
-            <h1>Welcome to</h1>
-            <h2>Rajeeve Gandhi Memorial College of Engineering and Technology</h2>
-            <p>Education with Peace</p>
-        </div>
-    </div>
+  // ---- Logout ----
+  function logout() {
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('regNo');
+    window.location.href = '../components/interface.html';
+  }
 
-    <!-- ================= CARDS SECTION ================= -->
-    <div class="list" id="display">
+  // ---- Sidebar toggle (mobile) ----
+  const sidebarEl  = document.getElementById('sidebar');
+  const overlayEl  = document.getElementById('sidebarOverlay');
+  document.getElementById('sidebarToggle').addEventListener('click', () => {
+    sidebarEl.classList.toggle('open');
+    overlayEl.style.display = sidebarEl.classList.contains('open') ? 'block' : 'none';
+  });
+  function closeSidebar() {
+    sidebarEl.classList.remove('open');
+    overlayEl.style.display = 'none';
+  }
 
-        <div class="card" style="width: 15rem;">
-            <img src="../images/clgservices.jpg" class="card-img-top" alt="services">
-            <div class="card-body text-center">
-                <h5 class="card-title" style="font-size: 28px;">Services</h5>
-                <p class="card-text">Empowering students with support, guidance, and essential campus services.</p>
-                <a href="services.html" class="btn btn-primary">Find</a>
-            </div>
-        </div>
+  // ---- Nav active states ----
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', function(e) {
+      if (this.getAttribute('href') === '#') e.preventDefault();
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      this.classList.add('active');
+      const id = this.id.replace('nav-','');
+      const title = document.getElementById('topbarTitle');
+      if (title) title.textContent = id.charAt(0).toUpperCase() + id.slice(1);
+    });
+  });
 
-        <div class="card" style="width: 15rem;">
-            <img src="../images/clgdept.jpg" class="card-img-top" alt="departments">
-            <div class="card-body text-center">
-                <h5 class="card-title" style="font-size: 28px;">Departments</h5>
-                <p class="card-text">Explore academic departments and programs.</p>
-                <a href="../components/department.html" class="btn btn-primary">Find</a>
-            </div>
-        </div>
+  // ---- Account dropdown ----
+  const accountBtn      = document.getElementById('accountMenuBtn');
+  const accountDropdown = document.getElementById('accountDropdown');
+  accountBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    accountDropdown.style.display = accountDropdown.style.display === 'none' ? 'block' : 'none';
+  });
+  document.addEventListener('click', () => { accountDropdown.style.display = 'none'; });
 
-        <div class="card" style="width: 15rem;">
-            <img src="../images/clgupdate.jpg" class="card-img-top" alt="updates">
-            <div class="card-body text-center">
-                <h5 class="card-title" style="font-size: 28px;">Updates</h5>
-                <p class="card-text">Get updates about college activities and academic schedules.</p>
-                <a href="#" class="btn btn-primary">Find</a>
-            </div>
-        </div>
+  // ---- Dark mode ----
+  const darkBtn = document.getElementById('darkToggleBtn');
+  function applyDark(on) {
+    document.body.classList.toggle('dark-mode-dash', on);
+    darkBtn.querySelector('i').className = on ? 'fa-solid fa-sun' : 'fa-solid fa-circle-half-stroke';
+  }
+  darkBtn.addEventListener('click', () => {
+    const on = !document.body.classList.contains('dark-mode-dash');
+    applyDark(on);
+    localStorage.setItem('darkMode', on);
+  });
+  if (localStorage.getItem('darkMode') === 'true') applyDark(true);
 
-        <div class="card" style="width: 15rem;">
-            <img src="../images/clginfo.jpg" class="card-img-top" alt="college_info">
-            <div class="card-body text-center">
-                <h5 class="card-title" style="font-size: 28px;">College Info</h5>
-                <p class="card-text">Official information about our institution and academic structure.</p>
-                <a href="#" class="btn btn-primary">Find</a>
-            </div>
-        </div>
-    </div>
-    <footer class="footer">
-    <div class="footer-container">
-
-        <!-- College Info -->
-        <div class="footer-section">
-            <h4>RGMCET</h4>
-            <p>Rajeeve Gandhi Memorial College of Engineering and Technology</p>
-            <p>Nandyal, Andhra Pradesh</p>
-        </div>
-
-        <!-- Quick Links -->
-        <div class="footer-section">
-            <h4>Quick Links</h4>
-            <ul>
-                <li><a href="../components/dashbord.html">Home</a></li>
-                <li><a href="../components/services.html">Student Services</a></li>
-                <li><a href="../components/department.html">Departments</a></li>
-                <li><a href="../components/updates.html">Updates</a></li>
-            </ul>
-        </div>
-
-        <!-- Contact -->
-        <div class="footer-section">
-            <h4>Contact</h4>
-            <p>Email: info@rgmcet.edu.in</p>
-            <p>Phone: +91 XXXXX XXXXX</p>
-        </div>
-        <div class="footer-section">
-            <h4>Social Media LInks</h4>
-            <div class="media">
-                <a href="https://www.instagram.com/rgmcet09/"><br><br><svg xmlns="http://www.w3.org/2000/svg" width="30" height="35" fill="currentColor" class="bi bi-instagram" style="color:rgb(246, 243, 243)"   viewBox="0 0 16 16" target="_blank">
-                <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.9 3.9 0 0 0-1.417.923A3.9 3.9 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.9 3.9 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.9 3.9 0 0 0-.923-1.417A3.9 3.9 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599s.453.546.598.92c.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.5 2.5 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.5 2.5 0 0 1-.92-.598 2.5 2.5 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233s.008-2.388.046-3.231c.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92s.546-.453.92-.598c.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92m-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217m0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334"/>
-                </svg></a>
-                <a href="https://www.youtube.com/@rgmcet-autonomousnandyala.7374"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="35" fill="currentColor" class="bi bi-youtube" style="color:rgb(246, 243, 243)" viewBox="0 0 16 16" target="_blank">
-                <path d="M8.051 1.999h.089c.822.003 4.987.033 6.11.335a2.01 2.01 0 0 1 1.415 1.42c.101.38.172.883.22 1.402l.01.104.022.26.008.104c.065.914.073 1.77.074 1.957v.075c-.001.194-.01 1.108-.082 2.06l-.008.105-.009.104c-.05.572-.124 1.14-.235 1.558a2.01 2.01 0 0 1-1.415 1.42c-1.16.312-5.569.334-6.18.335h-.142c-.309 0-1.587-.006-2.927-.052l-.17-.006-.087-.004-.171-.007-.171-.007c-1.11-.049-2.167-.128-2.654-.26a2.01 2.01 0 0 1-1.415-1.419c-.111-.417-.185-.986-.235-1.558L.09 9.82l-.008-.104A31 31 0 0 1 0 7.68v-.123c.002-.215.01-.958.064-1.778l.007-.103.003-.052.008-.104.022-.26.01-.104c.048-.519.119-1.023.22-1.402a2.01 2.01 0 0 1 1.415-1.42c.487-.13 1.544-.21 2.654-.26l.17-.007.172-.006.086-.003.171-.007A100 100 0 0 1 7.858 2zM6.4 5.209v4.818l4.157-2.408z"/>
-               </svg></a> 
-               <a href="https://www.rgmcet.edu.in/"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="35" fill="currentColor" class="bi bi-globe" style="color:rgb(246, 243, 243)" viewBox="0 0 16 16" target="_blank">
-               <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m7.5-6.923c-.67.204-1.335.82-1.887 1.855A8 8 0 0 0 5.145 4H7.5zM4.09 4a9.3 9.3 0 0 1 .64-1.539 7 7 0 0 1 .597-.933A7.03 7.03 0 0 0 2.255 4zm-.582 3.5c.03-.877.138-1.718.312-2.5H1.674a7 7 0 0 0-.656 2.5zM4.847 5a12.5 12.5 0 0 0-.338 2.5H7.5V5zM8.5 5v2.5h2.99a12.5 12.5 0 0 0-.337-2.5zM4.51 8.5a12.5 12.5 0 0 0 .337 2.5H7.5V8.5zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5zM5.145 12q.208.58.468 1.068c.552 1.035 1.218 1.65 1.887 1.855V12zm.182 2.472a7 7 0 0 1-.597-.933A9.3 9.3 0 0 1 4.09 12H2.255a7 7 0 0 0 3.072 2.472M3.82 11a13.7 13.7 0 0 1-.312-2.5h-2.49c.062.89.291 1.733.656 2.5zm6.853 3.472A7 7 0 0 0 13.745 12H11.91a9.3 9.3 0 0 1-.64 1.539 7 7 0 0 1-.597.933M8.5 12v2.923c.67-.204 1.335-.82 1.887-1.855q.26-.487.468-1.068zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.7 13.7 0 0 1-.312 2.5m2.802-3.5a7 7 0 0 0-.656-2.5H12.18c.174.782.282 1.623.312 2.5zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7 7 0 0 0-3.072-2.472c.218.284.418.598.597.933M10.855 4a8 8 0 0 0-.468-1.068C9.835 1.897 9.17 1.282 8.5 1.077V4z"/>
-               </svg></a>
-               <a href="https://l.facebook.com/l.php?u=http%3A%2F%2Fwww.rgitnandyal.com%2F&h=AT3HXGipIxZAe5_gnZ_06HGr0HbLEz0ujUKQFRMTjAeR_RkF47MGgbSnK8ZM-7GujCma4rfqS0bWBrGhgWnQzNDLDUuMvoBZDwRaieJJwcN_yEmMH7oEqIKx4aIMWVE48oEoOh8n7YNBOkeGXwz1of3_y_a1ZtffO2xi1Q"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="35" fill="currentColor" class="bi bi-facebook" style="color:rgb(246, 243, 243)" viewBox="0 0 16 16" target="_blank">
-              <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/>
-              </svg></a>
-            </div>
-        </div>
-    </div>
-
-    <div class="footer-bottom">
-        © 2026 RGMCET | All Rights Reserved
-    </div>
-</footer>
-
-    <script src="../components/security.js"></script>
-    <script>
-        history.pushState(null, null, location.href);
-        window.onpopstate = function () {
-            window.location.href = "../component/dashbord.html";   // back → home page
-        };
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  // ---- Back-nav block ----
+  history.pushState(null, null, location.href);
+  window.onpopstate = () => { window.location.href = '../components/dashbord.html'; };
+</script>
 </body>
-
 </html>

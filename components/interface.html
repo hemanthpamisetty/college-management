@@ -1,176 +1,390 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>RGM COLLEGR OF ENGINEERING AND TECHNOLOGY</title>
-    <link rel="icon" type="image/clglogo" href="/images/clglogo.png">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-        <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="../css/styles.css">
-    <link rel="stylesheet" href="../css/dashbord.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Rajeev Gandhi Memorial College of Engineering and Technology — Empowering futures through excellence in education, research, and innovation.">
+  <title>RGMCET — Rajeev Gandhi Memorial College of Engineering & Technology</title>
+  <link rel="icon" href="/images/clglogo.png">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- AOS -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="../css/styles.css">
 </head>
-
 <body>
 
-    <div class="title">
-        <img src="../images/clglogo.png" alt="collegr_logo" class="logo">
-        <h4>RAJEEV GANDHI MEMORIAL COLLEGE OF ENGINEERING AND TECHNOLOGY</h4>
-        <h5>(Autonomous)</h5>
-        <h5>NANDYAL-51801,NANDYAL(DIST),A.P.,INDIA</h5>
-    </div>
+<!-- ============================================================
+     LOADING SPINNER
+     ============================================================ -->
+<div id="page-loader">
+  <div class="spinner"></div>
+</div>
 
-    <!-- ======= Navigation Bar ========= -->
-    <div class="navbar">
-        <nav class="clogo"><svg xmlns="http://www.w3.org/2000/svg" width="3 0" height="35" fill="currentColor" class="bi bi-mortarboard" viewBox="0 0 16 16">
-        <path d="M8.211 2.047a.5.5 0 0 0-.422 0l-7.5 3.5a.5.5 0 0 0 .025.917l7.5 3a.5.5 0 0 0 .372 0L14 7.14V13a1 1 0 0 0-1 1v2h3v-2a1 1 0 0 0-1-1V6.739l.686-.275a.5.5 0 0 0 .025-.917zM8 8.46 1.758 5.965 8 3.052l6.242 2.913z"/>
-        <path d="M4.176 9.032a.5.5 0 0 0-.656.327l-.5 1.7a.5.5 0 0 0 .294.605l4.5 1.8a.5.5 0 0 0 .372 0l4.5-1.8a.5.5 0 0 0 .294-.605l-.5-1.7a.5.5 0 0 0-.656-.327L8 10.466zm-.068 1.873.22-.748 3.496 1.311a.5.5 0 0 0 .352 0l3.496-1.311.22.748L8 12.46z"/>
-            </svg>RGMCET</nav>
-           <div class="menu-toggle" onclick="toggleMenu()">
-                <i class="bi bi-list" id="openIcon"></i>
-                <i class="bi bi-x-lg" id="closeIcon" style="display:none;"></i>
-           </div>
-        <ul class="links" id="navLinks">
-            <li><a href="../components/login.html"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="35" fill="currentColor" class="bi bi-box-arrow-in-left" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M10 3.5a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-2a.5.5 0 0 1 1 0v2A1.5 1.5 0 0 1 9.5 14h-8A1.5 1.5 0 0 1 0 12.5v-9A1.5 1.5 0 0 1 1.5 2h8A1.5 1.5 0 0 1 11 3.5v2a.5.5 0 0 1-1 0z"/>
-                    <path fill-rule="evenodd" d="M4.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H14.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708z"/>
-            </svg>Login</a></li>
-            <li><a href="about">About</a></li>
-            <li><a href="contact"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="35" fill="currentColor" class="bi bi-telephone" viewBox="0 0 16 16">
-            <path d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.6 17.6 0 0 0 4.168 6.608 17.6 17.6 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 
-                0 0-.063-1.015l-2.307-1.794a.68.68 0 0 0-.58-.122l-2.19.547a1.75 1.75 0 0 1-1.657-.459L5.482 8.062a1.75 1.75 0 0 1-.46-1.657l.548-2.19a.68.68 0 0 0-.122-.58zM1.884.511a1.745 1.745 0 0 1 2.612.163L6.29 2.98c.329.423.445.
-                974.315 1.494l-.547 2.19a.68.68 0 0 0 .178.643l2.457 2.457a.68.68 0 0 0 .644.178l2.189-.547a1.75 1.75 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.6 18.6 0 0 1-7.01-4.42 18.6 18.6 0 0 1-4.42-7.009c-.362-1.
-                03-.037-2.137.703-2.877z"/>
-            </svg>Contact</a></li>
-        </ul>
+<!-- ============================================================
+     ANNOUNCEMENT BAR
+     ============================================================ -->
+<div class="announce-bar" id="announceBar">
+  <i class="fa-solid fa-bell-school"></i>
+  <span>🎓 Admissions 2026–27 are now open! <a href="#">Apply now →</a></span>
+  <button onclick="document.getElementById('announceBar').style.display='none'; document.body.classList.remove('has-announce');" aria-label="Close">×</button>
+</div>
+
+<!-- ============================================================
+     NAVBAR — GLASSMORPHISM
+     ============================================================ -->
+<nav class="navbar" id="mainNavbar">
+  <a href="#" class="clogo">
+    <i class="fa-solid fa-graduation-cap" style="font-size:26px;color:#06B6D4;-webkit-text-fill-color:#06B6D4;"></i>
+    RGMCET
+  </a>
+
+  <ul class="links" id="navLinks">
+    <li><a href="#hero"><i class="fa-solid fa-house"></i> Home</a></li>
+    <li><a href="#services"><i class="fa-solid fa-grid-2"></i> Services</a></li>
+    <li><a href="#departments"><i class="fa-solid fa-building-columns"></i> Departments</a></li>
+    <li><a href="#events"><i class="fa-solid fa-calendar-star"></i> Events</a></li>
+    <li><a href="#gallery"><i class="fa-solid fa-images"></i> Gallery</a></li>
+    <li><a href="../components/login.html" id="loginNavBtn"
+         style="background:linear-gradient(135deg,#4F46E5,#06B6D4);color:#fff;border-radius:999px;padding:10px 22px;">
+         <i class="fa-solid fa-arrow-right-to-bracket"></i> Login
+    </a></li>
+  </ul>
+
+  <button id="dark-toggle" title="Toggle dark mode" aria-label="Toggle dark mode">
+    <i class="fa-solid fa-circle-half-stroke"></i>
+  </button>
+
+  <button class="menu-toggle" id="menuBtn" aria-label="Open menu">
+    <i class="fa-solid fa-bars" id="openIcon"></i>
+  </button>
+</nav>
+
+<!-- ============================================================
+     HERO SECTION
+     ============================================================ -->
+<section class="hero-section" id="hero">
+  <div class="hero-blob blob1"></div>
+  <div class="hero-blob blob2"></div>
+  <div class="hero-blob blob3"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span></span> NAAC Accredited | AICTE Approved | Autonomous
     </div>
-    <!-- ======= CINTENT ON IMAGE ======== -->
-    <nav>
-        <img src="../images/image2.png" alt="college_logo" class="backimg">
-        <div class="content">
-            <h1>Welcome to </h1>
-            <h2>Rajeev Gandhi Memorial College of Engineering and Technology</h2>
-            <p>Education with Peace</p>
+    <h1 class="hero-title">
+      Welcome to
+      <span class="gradient-text">RGMCET</span>
+    </h1>
+    <p class="hero-sub">
+      Rajeev Gandhi Memorial College of Engineering &amp; Technology — shaping
+      engineers and innovators since 1997. Education with Peace.
+    </p>
+    <div class="hero-btns">
+      <a href="../components/login.html" class="btn-primary-hero" id="hero-cta-login">
+        <i class="fa-solid fa-arrow-right-to-bracket"></i> Student Portal
+      </a>
+      <a href="#departments" class="btn-outline-hero">
+        <i class="fa-solid fa-building-columns"></i> Explore Departments
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <h3>27+</h3><p>Years of Excellence</p>
+      </div>
+      <div class="hero-stat">
+        <h3>11</h3><p>Departments</p>
+      </div>
+      <div class="hero-stat">
+        <h3>5000+</h3><p>Alumni Network</p>
+      </div>
+      <div class="hero-stat">
+        <h3>95%</h3><p>Placement Rate</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SERVICES SECTION
+     ============================================================ -->
+<section class="section" id="services">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <div class="section-tag">What We Offer</div>
+      <h2 class="section-title">College Services</h2>
+      <p class="section-sub">Everything you need to thrive academically and beyond, all in one place.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card" data-aos="fade-up" data-aos-delay="0">
+        <div class="service-icon"><i class="fa-solid fa-book-open-reader"></i></div>
+        <h3>Academic Resources</h3>
+        <p>Access course materials, e-library, research journals, and digital learning tools 24/7.</p>
+      </div>
+      <div class="service-card" data-aos="fade-up" data-aos-delay="80">
+        <div class="service-icon"><i class="fa-solid fa-briefcase"></i></div>
+        <h3>Career & Placements</h3>
+        <p>Industry partnerships, on-campus drives, internship programs, and skill development workshops.</p>
+      </div>
+      <div class="service-card" data-aos="fade-up" data-aos-delay="160">
+        <div class="service-icon"><i class="fa-solid fa-flask"></i></div>
+        <h3>Research & Labs</h3>
+        <p>State-of-the-art laboratories, funded research projects, and innovation incubation centres.</p>
+      </div>
+      <div class="service-card" data-aos="fade-up" data-aos-delay="240">
+        <div class="service-icon"><i class="fa-solid fa-house-user"></i></div>
+        <h3>Hostel & Campus</h3>
+        <p>Comfortable residential facilities, cafeteria, sports complex, and 24/7 medical support.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     DEPARTMENTS TEASER
+     ============================================================ -->
+<section class="section section-alt" id="departments">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <div class="section-tag">Academic Programs</div>
+      <h2 class="section-title">Our Departments</h2>
+      <p class="section-sub">Explore world-class engineering and science programs designed for the future.</p>
+    </div>
+    <div class="dept-grid">
+      <div class="dept-mini-card" data-aos="fade-up" data-aos-delay="0">
+        <div class="dept-icon-badge"><i class="fa-solid fa-laptop-code"></i></div>
+        <h4>CSE</h4><p>Computer Science</p>
+      </div>
+      <div class="dept-mini-card" data-aos="fade-up" data-aos-delay="60">
+        <div class="dept-icon-badge"><i class="fa-solid fa-microchip"></i></div>
+        <h4>ECE</h4><p>Electronics & Comm.</p>
+      </div>
+      <div class="dept-mini-card" data-aos="fade-up" data-aos-delay="120">
+        <div class="dept-icon-badge"><i class="fa-solid fa-bolt"></i></div>
+        <h4>EEE</h4><p>Electrical & Electronics</p>
+      </div>
+      <div class="dept-mini-card" data-aos="fade-up" data-aos-delay="180">
+        <div class="dept-icon-badge"><i class="fa-solid fa-brain"></i></div>
+        <h4>CSE (AI&ML)</h4><p>Artificial Intelligence</p>
+      </div>
+      <div class="dept-mini-card" data-aos="fade-up" data-aos-delay="240">
+        <div class="dept-icon-badge"><i class="fa-solid fa-chart-scatter"></i></div>
+        <h4>CSE (DS)</h4><p>Data Science</p>
+      </div>
+      <div class="dept-mini-card" data-aos="fade-up" data-aos-delay="300">
+        <div class="dept-icon-badge"><i class="fa-solid fa-shield-halved"></i></div>
+        <h4>CSE (CS)</h4><p>Cyber Security</p>
+      </div>
+      <div class="dept-mini-card" data-aos="fade-up" data-aos-delay="360">
+        <div class="dept-icon-badge"><i class="fa-solid fa-gears"></i></div>
+        <h4>Mechanical</h4><p>Mech Engineering</p>
+      </div>
+      <div class="dept-mini-card" data-aos="fade-up" data-aos-delay="420">
+        <div class="dept-icon-badge"><i class="fa-solid fa-helmet-safety"></i></div>
+        <h4>Civil</h4><p>Civil Engineering</p>
+      </div>
+      <div class="dept-mini-card" data-aos="fade-up" data-aos-delay="480">
+        <div class="dept-icon-badge"><i class="fa-solid fa-square-root-variable"></i></div>
+        <h4>Mathematics</h4><p>Applied Sciences</p>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:40px;" data-aos="fade-up">
+      <a href="../components/department.html" class="btn-primary-hero" style="display:inline-flex;">
+        <i class="fa-solid fa-arrow-right"></i> View All Departments
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     EVENTS SECTION
+     ============================================================ -->
+<section class="section" id="events">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <div class="section-tag">What's Happening</div>
+      <h2 class="section-title">Upcoming Events</h2>
+      <p class="section-sub">Stay in the loop with academic, cultural, and technical events at RGMCET.</p>
+    </div>
+    <div class="events-timeline">
+      <div class="event-item" data-aos="fade-right">
+        <div class="event-dot"></div>
+        <div class="event-card">
+          <div class="event-date"><i class="fa-solid fa-calendar"></i> May 12, 2026</div>
+          <h4>Tech Fest 2026 — Innovate &amp; Create</h4>
+          <p>Annual technical symposium featuring project exhibitions, hackathons, paper presentations, and workshops from industry experts.</p>
         </div>
-    </nav>
-    <div style="color: white;">
-        <br>
-        <h1>College Provides</h1>
-    </div>
-    <!-- ========== CARDS USED TO NAVIGATES =========  -->
-
-    <div class="list" id="display">
-        <nav class="services"><!-- COLLEGES SERVICES CARD -->
-            <div class="card" style="width: 15rem;">
-                <img src="../images/clgservices.jpg" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title" style="font-size: 30px;">Services</h5>
-                    <p class="card-text">Empowering students with support, guidance, and essential campus services.</p>
-                </div>
-            </div>
-        </nav>
-        <nav class="branch"><!-- COLLEGE DEPARTMENTS CARD -->
-            <div class="card" style="width: 15rem;">
-                <img src="../images/clgdept.jpg" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title" style="font-size: 30px;">Departments</h5>
-                    <p class="card-text">Empowering students with support, guidance, and essential campus services.</p>
-                </div>
-            </div>
-        </nav>
-        <nav class="update"><!-- COLLEGE UPDATES CARD -->
-            <div class="card" style="width: 15rem;">
-                <img src="../images/clgupdate.jpg" class="card-img-top " alt="...">
-                <div class="card-body">
-                    <h5 class="card-title" style="font-size: 30px;">Updates</h5>
-                    <p class="card-text">Get updates about college activities and academic schedules.</p>
-                </div>
-            </div>
-        </nav>
-        <nav class="clginfo"> <!-- COLLEGE INFORMATION CARD -->
-            <div class="card" style="width: 15rem;">
-                <img src="../images/clginfo.jpg" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title" style="font-size: 30px;">College Info</h5>
-                    <p class="card-text">Official information about our institution and academic structure.</p>
-                </div>
-            </div>
-        </nav>
-        </nav>
-    </div>
-    <footer class="footer">
-    <div class="footer-container">
-
-        <!-- College Info -->
-        <div class="footer-section">
-            <h4>RGMCET</h4>
-            <p>Rajeeve Gandhi Memorial College of Engineering and Technology</p>
-            <p>Nandyal, Andhra Pradesh</p>
+      </div>
+      <div class="event-item" data-aos="fade-right" data-aos-delay="100">
+        <div class="event-dot"></div>
+        <div class="event-card">
+          <div class="event-date"><i class="fa-solid fa-calendar"></i> May 24, 2026</div>
+          <h4>Campus Placement Drive — TCS, Infosys, Wipro</h4>
+          <p>On-campus recruitment drive for final year students. Pre-requisite: register through the placement portal before May 18.</p>
         </div>
-
-        <!-- Quick Links -->
-        <div class="footer-section">
-            <h4>Quick Links</h4>
-            <ul>
-                <li><a href="../components/dashbord.html">Home</a></li>
-                <li><a href="../components/services.html">Student Services</a></li>
-                <li><a href="../components/department.html">Departments</a></li>
-                <li><a href="../components/update.html">Updates</a></li>
-            </ul>
+      </div>
+      <div class="event-item" data-aos="fade-right" data-aos-delay="200">
+        <div class="event-dot"></div>
+        <div class="event-card">
+          <div class="event-date"><i class="fa-solid fa-calendar"></i> June 6, 2026</div>
+          <h4>Cultural Fest — Utsav 2026</h4>
+          <p>Three days of dance, music, drama, and literary events. Open registrations now through the college portal.</p>
         </div>
-
-        <!-- Contact -->
-        <div class="footer-section">
-            <h4>Contact</h4>
-            <p>Email: info@rgmcet.edu.in</p>
-            <p>Phone: +91 XXXXX XXXXX</p>  
+      </div>
+      <div class="event-item" data-aos="fade-right" data-aos-delay="300">
+        <div class="event-dot"></div>
+        <div class="event-card">
+          <div class="event-date"><i class="fa-solid fa-calendar"></i> June 20, 2026</div>
+          <h4>Semester End Examination Schedule Released</h4>
+          <p>End-of-semester examinations begin June 20. Hall tickets available via student login portal from June 12.</p>
         </div>
-
-        <div class="footer-section">
-            <h4>Social Media LInks</h4>
-            <div class="media">
-                <a href="https://www.instagram.com/rgmcet09/" target="_blank"><br><br><svg xmlns="http://www.w3.org/2000/svg" width="30" height="35" fill="currentColor" class="bi bi-instagram" style="color:rgb(246, 243, 243)"   viewBox="0 0 16 16">
-                <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.9 3.9 0 0 0-1.417.923A3.9 3.9 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.9 3.9 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.9 3.9 0 0 0-.923-1.417A3.9 3.9 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599s.453.546.598.92c.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.5 2.5 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.5 2.5 0 0 1-.92-.598 2.5 2.5 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233s.008-2.388.046-3.231c.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92s.546-.453.92-.598c.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92m-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217m0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334"/>
-                </svg></a>
-                <a href="https://www.youtube.com/@rgmcet-autonomousnandyala.7374" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="35" fill="currentColor" class="bi bi-youtube" style="color:rgb(246, 243, 243)" viewBox="0 0 16 16">
-                <path d="M8.051 1.999h.089c.822.003 4.987.033 6.11.335a2.01 2.01 0 0 1 1.415 1.42c.101.38.172.883.22 1.402l.01.104.022.26.008.104c.065.914.073 1.77.074 1.957v.075c-.001.194-.01 1.108-.082 2.06l-.008.105-.009.104c-.05.572-.124 1.14-.235 1.558a2.01 2.01 0 0 1-1.415 1.42c-1.16.312-5.569.334-6.18.335h-.142c-.309 0-1.587-.006-2.927-.052l-.17-.006-.087-.004-.171-.007-.171-.007c-1.11-.049-2.167-.128-2.654-.26a2.01 2.01 0 0 1-1.415-1.419c-.111-.417-.185-.986-.235-1.558L.09 9.82l-.008-.104A31 31 0 0 1 0 7.68v-.123c.002-.215.01-.958.064-1.778l.007-.103.003-.052.008-.104.022-.26.01-.104c.048-.519.119-1.023.22-1.402a2.01 2.01 0 0 1 1.415-1.42c.487-.13 1.544-.21 2.654-.26l.17-.007.172-.006.086-.003.171-.007A100 100 0 0 1 7.858 2zM6.4 5.209v4.818l4.157-2.408z"/>
-               </svg></a> 
-               <a href="https://www.rgmcet.edu.in/" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="35" fill="currentColor" class="bi bi-globe" style="color:rgb(246, 243, 243)" viewBox="0 0 16 16">
-               <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m7.5-6.923c-.67.204-1.335.82-1.887 1.855A8 8 0 0 0 5.145 4H7.5zM4.09 4a9.3 9.3 0 0 1 .64-1.539 7 7 0 0 1 .597-.933A7.03 7.03 0 0 0 2.255 4zm-.582 3.5c.03-.877.138-1.718.312-2.5H1.674a7 7 0 0 0-.656 2.5zM4.847 5a12.5 12.5 0 0 0-.338 2.5H7.5V5zM8.5 5v2.5h2.99a12.5 12.5 0 0 0-.337-2.5zM4.51 8.5a12.5 12.5 0 0 0 .337 2.5H7.5V8.5zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5zM5.145 12q.208.58.468 1.068c.552 1.035 1.218 1.65 1.887 1.855V12zm.182 2.472a7 7 0 0 1-.597-.933A9.3 9.3 0 0 1 4.09 12H2.255a7 7 0 0 0 3.072 2.472M3.82 11a13.7 13.7 0 0 1-.312-2.5h-2.49c.062.89.291 1.733.656 2.5zm6.853 3.472A7 7 0 0 0 13.745 12H11.91a9.3 9.3 0 0 1-.64 1.539 7 7 0 0 1-.597.933M8.5 12v2.923c.67-.204 1.335-.82 1.887-1.855q.26-.487.468-1.068zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.7 13.7 0 0 1-.312 2.5m2.802-3.5a7 7 0 0 0-.656-2.5H12.18c.174.782.282 1.623.312 2.5zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7 7 0 0 0-3.072-2.472c.218.284.418.598.597.933M10.855 4a8 8 0 0 0-.468-1.068C9.835 1.897 9.17 1.282 8.5 1.077V4z"/>
-               </svg></a>
-               <a href="https://l.facebook.com/l.php?u=http%3A%2F%2Fwww.rgitnandyal.com%2F&h=AT3HXGipIxZAe5_gnZ_06HGr0HbLEz0ujUKQFRMTjAeR_RkF47MGgbSnK8ZM-7GujCma4rfqS0bWBrGhgWnQzNDLDUuMvoBZDwRaieJJwcN_yEmMH7oEqIKx4aIMWVE48oEoOh8n7YNBOkeGXwz1of3_y_a1ZtffO2xi1Q" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="35" fill="currentColor" class="bi bi-facebook" style="color:rgb(246, 243, 243)" viewBox="0 0 16 16">
-  <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/>
-</svg></a>
-            </div>
-        </div>
-
+      </div>
     </div>
+  </div>
+</section>
 
-    <div class="footer-bottom">
-        © 2026 RGMCET | All Rights Reserved
+<!-- ============================================================
+     GALLERY SECTION
+     ============================================================ -->
+<section class="section section-alt" id="gallery">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <div class="section-tag">Campus Life</div>
+      <h2 class="section-title">Photo Gallery</h2>
+      <p class="section-sub">A glimpse into the vibrant life at RGMCET — labs, events, and moments that matter.</p>
     </div>
+    <div class="gallery-grid">
+      <div class="gallery-item" data-aos="zoom-in" data-aos-delay="0">
+        <img src="../images/image2.png" alt="RGMCET Campus">
+        <div class="gallery-overlay"><span><i class="fa-solid fa-image"></i> Campus View</span></div>
+      </div>
+      <div class="gallery-item" data-aos="zoom-in" data-aos-delay="100">
+        <img src="../images/cse.png" alt="CSE Lab">
+        <div class="gallery-overlay"><span><i class="fa-solid fa-image"></i> CSE Laboratory</span></div>
+      </div>
+      <div class="gallery-item" data-aos="zoom-in" data-aos-delay="200">
+        <img src="../images/ece.png" alt="ECE Lab">
+        <div class="gallery-overlay"><span><i class="fa-solid fa-image"></i> Electronics Lab</span></div>
+      </div>
+      <div class="gallery-item" data-aos="zoom-in" data-aos-delay="100">
+        <img src="../images/mech.png" alt="Mechanical Lab">
+        <div class="gallery-overlay"><span><i class="fa-solid fa-image"></i> Mechanical Workshop</span></div>
+      </div>
+      <div class="gallery-item" data-aos="zoom-in" data-aos-delay="200">
+        <img src="../images/civil.png" alt="Civil Lab">
+        <div class="gallery-overlay"><span><i class="fa-solid fa-image"></i> Civil Engineering</span></div>
+      </div>
+      <div class="gallery-item" data-aos="zoom-in" data-aos-delay="300">
+        <img src="../images/aiml.png" alt="AI Lab">
+        <div class="gallery-overlay"><span><i class="fa-solid fa-image"></i> AI &amp; ML Lab</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-brand">
+      <h3><i class="fa-solid fa-graduation-cap" style="color:#06B6D4;"></i> RGMCET</h3>
+      <p>Rajeev Gandhi Memorial College of Engineering and Technology, Nandyal — Andhra Pradesh, India — 518501.</p>
+      <div class="social-links">
+        <a href="https://www.instagram.com/rgmcet09/" target="_blank" class="social-btn" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://www.youtube.com/@rgmcet-autonomousnandyala.7374" target="_blank" class="social-btn" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+        <a href="https://www.rgmcet.edu.in/" target="_blank" class="social-btn" title="Website"><i class="fa-solid fa-globe"></i></a>
+        <a href="#" target="_blank" class="social-btn" title="Facebook"><i class="fa-brands fa-facebook"></i></a>
+        <a href="#" target="_blank" class="social-btn" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#hero">Home</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#departments">Departments</a></li>
+        <li><a href="#events">Events</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Student Portal</h4>
+      <ul>
+        <li><a href="../components/login.html">Login</a></li>
+        <li><a href="../components/register.html">Register</a></li>
+        <li><a href="../components/dashbord.html">Dashboard</a></li>
+        <li><a href="../components/department.html">Departments</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact Us</h4>
+      <p><i class="fa-solid fa-envelope"></i> info@rgmcet.edu.in</p>
+      <p><i class="fa-solid fa-phone"></i> +91 (0518) 2250046</p>
+      <p><i class="fa-solid fa-location-dot"></i> Nandyal, A.P. 518501</p>
+      <p><i class="fa-solid fa-clock"></i> Mon–Sat: 8 AM – 6 PM</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2026 RGMCET — Rajeev Gandhi Memorial College of Engineering and Technology. All Rights Reserved.
+  </div>
 </footer>
- <script>
-function toggleMenu() {
-    const navLinks = document.getElementById("navLinks");
-    const openIcon = document.getElementById("openIcon");
-    const closeIcon = document.getElementById("closeIcon");
 
-    navLinks.classList.toggle("show");
+<!-- ============================================================
+     SCRIPTS
+     ============================================================ -->
+<!-- AOS -->
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script>
+  // AOS Init
+  AOS.init({ duration: 700, once: true, offset: 80 });
 
-    if (navLinks.classList.contains("show")) {
-        openIcon.style.display = "none";
-        closeIcon.style.display = "inline";
-    } else {
-        openIcon.style.display = "inline";
-        closeIcon.style.display = "none";
-    }
-}
+  // Page loader
+  window.addEventListener('load', () => {
+    const loader = document.getElementById('page-loader');
+    setTimeout(() => loader.classList.add('hide'), 400);
+  });
+
+  // Announce bar
+  document.body.classList.add('has-announce');
+
+  // Sticky navbar scroll style
+  const navbar = document.getElementById('mainNavbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 50);
+  });
+
+  // Hamburger menu
+  const menuBtn  = document.getElementById('menuBtn');
+  const navLinks = document.getElementById('navLinks');
+  const openIcon = document.getElementById('openIcon');
+  menuBtn.addEventListener('click', () => {
+    const open = navLinks.classList.toggle('show');
+    openIcon.className = open ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
+  });
+  // Close on link click
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    navLinks.classList.remove('show');
+    openIcon.className = 'fa-solid fa-bars';
+  }));
+
+  // Dark mode toggle
+  const darkBtn = document.getElementById('dark-toggle');
+  darkBtn.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+    const icon = darkBtn.querySelector('i');
+    icon.className = document.body.classList.contains('dark-mode')
+      ? 'fa-solid fa-sun' : 'fa-solid fa-circle-half-stroke';
+    localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+  });
+  if (localStorage.getItem('darkMode') === 'true') {
+    document.body.classList.add('dark-mode');
+    darkBtn.querySelector('i').className = 'fa-solid fa-sun';
+  }
 </script>
-
 </body>
-
 </html>

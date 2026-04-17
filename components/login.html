@@ -1,55 +1,123 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login-RGMCET</title>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Login to the RGMCET Student Portal — Access your academic dashboard, records, and services.">
+  <title>Login — RGMCET Student Portal</title>
+  <link rel="icon" href="/images/clglogo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../css/login.css">
+</head>
+<body>
 
-    <link rel="icon" type="image/clglogo" href="/images/clglogo.png">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../css/login.css">
-  </head>
+<!-- ===== Toast Container ===== -->
+<div class="toast-container" id="toastContainer"></div>
 
-  <body class="d-flex justify-content-center align-items-center background-transparent vh-100" id="login-container">
-    <div class="card shadow" style="width: 22rem;">
-        <div class="card-body text-center">
-            <h1 class="card-title">Welcome</h1>
-            <p class="card-text">Please login to continue</p>
-
-            <!-- FORM -->
-            <form id="loginForm">
-
-                <div class="mb-3 text-start">
-                   <label class="form-label">Registration number</label>
-                   <input type="text" class="form-control" id="textInput" placeholder="Reg-number" required>
-                </div>
-
-                <div class="mb-3 text-start">
-                  <label class="form-label">Password</label>
-                  <input type="password" class="form-control" id="passwordInput" placeholder="Password">
-                </div>
-
-                <p>Don't have an account? <a href="register.html">Register here</a></p>
-
-                <!-- ERROR MESSAGE -->
-                <p id="error" class="text-danger"></p>
-
-                <!-- LOGIN BUTTON -->
-                <button type="submit" class="btn btn-primary w-100" id="Login_button">Login</button>
-
-            </form>
-        </div>
+<!-- ===== LEFT PANEL — Branding ===== -->
+<div class="auth-panel">
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+  <div class="blob blob3"></div>
+  <div class="auth-panel-content">
+    <div class="auth-panel-logo">
+      <i class="fa-solid fa-graduation-cap" style="color:#67e8f9;font-size:38px;"></i>
     </div>
-    <script src="../components/login.js"></script>
-    <script>
-      history.pushState(null, null, location.href);
-      window.onpopstate = function () {
-      window.location.href = "../components/interface.html";   // back → home page
-    };
-    </script>
+    <h1>RGMCET</h1>
+    <p>Rajeev Gandhi Memorial College of Engineering &amp; Technology, Nandyal — Education with Peace.</p>
+    <ul class="auth-panel-features">
+      <li><i class="fa-solid fa-circle-check"></i> Access your academic records instantly</li>
+      <li><i class="fa-solid fa-circle-check"></i> View timetables &amp; exam schedules</li>
+      <li><i class="fa-solid fa-circle-check"></i> Track attendance &amp; grades</li>
+      <li><i class="fa-solid fa-circle-check"></i> Explore departments &amp; campus events</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ===== RIGHT SIDE — Form ===== -->
+<div class="auth-form-side">
+  <div class="auth-card">
+    <div class="auth-card-header">
+      <div style="width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#4F46E5,#06B6D4);
+                  display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+        <i class="fa-solid fa-user-graduate" style="color:#fff;font-size:24px;"></i>
+      </div>
+      <h2>Welcome back</h2>
+      <p>Sign in to your student account</p>
+    </div>
+
+    <form id="loginForm" autocomplete="off">
+
+      <div class="form-field">
+        <label for="textInput"><i class="fa-solid fa-id-card" style="margin-right:6px;color:#4F46E5;"></i>Registration Number</label>
+        <div class="input-wrapper">
+          <i class="fa-solid fa-hashtag"></i>
+          <input type="text" class="form-input" id="textInput" placeholder="e.g. 22A91A0501" required autocomplete="off">
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label for="passwordInput"><i class="fa-solid fa-lock" style="margin-right:6px;color:#4F46E5;"></i>Password</label>
+        <div class="input-wrapper" style="position:relative;">
+          <i class="fa-solid fa-key"></i>
+          <input type="password" class="form-input" id="passwordInput" placeholder="Enter your password" required>
+          <button type="button" id="togglePass"
+            style="position:absolute;right:14px;background:none;border:none;cursor:pointer;color:#94a3b8;font-size:15px;"
+            onclick="togglePassword()">
+            <i class="fa-solid fa-eye" id="eyeIcon"></i>
+          </button>
+        </div>
+      </div>
+
+      <p id="error" style="color:#ef4444;font-size:13px;min-height:20px;margin-bottom:8px;"></p>
+
+      <button type="submit" class="btn-submit" id="Login_button">
+        <i class="fa-solid fa-arrow-right-to-bracket"></i> &nbsp;Sign In
+      </button>
+
+      <p class="auth-alt" style="margin-top:20px;">
+        Don't have an account? <a href="../components/register.html">Create one →</a>
+      </p>
+      <p class="auth-alt">
+        <a href="../components/interface.html" style="color:#64748b;">
+          <i class="fa-solid fa-arrow-left"></i> Back to Home
+        </a>
+      </p>
+    </form>
+  </div>
+</div>
+
+<!-- ===== Scripts ===== -->
+<script src="../components/login.js"></script>
+<script>
+  // Password toggle
+  function togglePassword() {
+    const inp  = document.getElementById('passwordInput');
+    const icon = document.getElementById('eyeIcon');
+    if (inp.type === 'password') {
+      inp.type = 'text';
+      icon.className = 'fa-solid fa-eye-slash';
+    } else {
+      inp.type = 'password';
+      icon.className = 'fa-solid fa-eye';
+    }
+  }
+
+  // Toast helper
+  function showToast(msg, type = 'success') {
+    const container = document.getElementById('toastContainer');
+    const t = document.createElement('div');
+    t.className = `toast ${type}`;
+    t.innerHTML = `<i class="fa-solid fa-${type==='success'?'circle-check':'circle-xmark'}"></i> ${msg}`;
+    container.appendChild(t);
+    setTimeout(() => t.remove(), 3500);
+  }
+
+  // Block back-nav
+  history.pushState(null, null, location.href);
+  window.onpopstate = () => { window.location.href = '../components/interface.html'; };
+</script>
 </body>
-
-  </body>
 </html>
-
-

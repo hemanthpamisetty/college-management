@@ -1,42 +1,9 @@
-form{
-    font-style:oblique;
-}
-.card-body{
-    font-family: comforta;
-}
-body{
-    background-image: url(../images/image2.png); position: relative;
-    width: 100%;
-    height: 50%;  
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    border-radius: 0px;
-    overflow: hidden;
-}
+/* Register CSS — reuse login layout, panel on right */
+@import url('../css/login.css');
 
-/* ============================= */
-/* Mobile Responsive - Login/Register */
-/* ============================= */
+/* Flip panel to right side on register */
+body { flex-direction: row-reverse; }
 
 @media (max-width: 768px) {
-
-    body {
-        min-height: 100vh;      /* Full screen */
-        background-position: center top;
-    }
-
-    .card {
-        width: 90% !important; /* Fit mobile screen */
-        margin: auto;
-    }
-
-    .card-body {
-        padding: 20px;
-        font-size: 14px;
-    }
-
-    form {
-        font-style: normal;    /* Better readability on mobile */
-    }
+  body { flex-direction: column; }
 }
