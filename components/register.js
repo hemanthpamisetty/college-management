@@ -1,25 +1,5 @@
-// ---------- HASH FUNCTION ----------
-function hash(text){
-    let hash = 0;
-    for(let i = 0; i < text.length; i++){
-        hash = ((hash << 5) - hash) + text.charCodeAt(i);
-        hash |= 0;
-    }
-    return hash.toString();
-}
-
-// ---------- GET USERS ----------
-function getUsers(){
-    return JSON.parse(localStorage.getItem("users")) || [];
-}
-
-// ---------- SAVE USERS ----------
-function saveUsers(users){
-    localStorage.setItem("users", JSON.stringify(users));
-}
-
 // ---------- REGISTER LOGIC ----------
-document.getElementById("registerForm").addEventListener("submit", function(e){
+document.getElementById("registerForm").addEventListener("submit", async function(e){
     e.preventDefault();
 
     const email = document.getElementById("emailInput").value.trim();
@@ -48,28 +28,37 @@ document.getElementById("registerForm").addEventListener("submit", function(e){
         return;
     }
 
-    let users = getUsers();
+    try {
+        const response = await fetch("http://localhost:8080/api/auth/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                name: regno, // Using regno as name for basic demo
+                email: email,
+                password: password,
+                role: "STUDENT",
+                registrationNumber: regno
+            })
+        });
 
-    // ---------- DUPLICATE CHECK ----------
-    const exists = users.find(u => u.regno === regno || u.email === email);
-    if(exists){
-        error.innerText = "User already registered!";
-        return;
+        if (response.ok) {
+            success.innerText = "Registration successful! Redirecting to login...";
+            setTimeout(() => {
+                window.location.href = "login.html";
+            }, 1500);
+        } else {
+            const errData = await response.json();
+            // Handle validation errors or normal error message
+            if (errData.message) {
+                error.innerText = errData.message;
+            } else {
+                error.innerText = "Registration failed! Check input constraints.";
+            }
+        }
+    } catch (err) {
+        console.error(err);
+        error.innerText = "Network error. Server might be down.";
     }
-
-    // ---------- SAVE USER ----------
-    users.push({
-        email: email,
-        regno: regno,
-        password: hash(password)
-    });
-
-    saveUsers(users);
-
-    success.innerText = "Registration successful! Redirecting to login...";
-
-    // ---------- REDIRECT ----------
-    setTimeout(() => {
-        window.location.href = "login.html";
-    }, 1500);
 });

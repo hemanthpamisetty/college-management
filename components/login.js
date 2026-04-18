@@ -1,28 +1,5 @@
-// ---------------- DEMO USER DATABASE ----------------
-// (Later connect to backend DB for real security)
-const users = [
-    {
-        regno: "24091A05AG",
-        password: hash("123456")
-    },
-    {
-        regno: "24091a05ag",
-        password: hash("987654")
-    }
-];
-
-// ---------------- HASH FUNCTION ----------------
-function hash(text){
-    let hash = 0;
-    for(let i = 0; i < text.length; i++){
-        hash = ((hash << 5) - hash) + text.charCodeAt(i);
-        hash |= 0;
-    }
-    return hash.toString();
-}
-
 // ---------------- LOGIN LOGIC ----------------
-document.getElementById("loginForm").addEventListener("submit", function(e){
+document.getElementById("loginForm").addEventListener("submit", async function(e){
     e.preventDefault();
 
     const regno = document.getElementById("textInput").value.trim();
@@ -40,19 +17,34 @@ document.getElementById("loginForm").addEventListener("submit", function(e){
         return;
     }
 
-    // -------- AUTHENTICATION --------
-    const hashedPass = hash(password);
+    try {
+        const response = await fetch("http://localhost:8080/api/auth/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                email: regno, // Can be email or registration number
+                password: password
+            })
+        });
 
-    const user = users.find(u => u.regno === regno && u.password === hashedPass);
+        if (response.ok) {
+            const data = await response.json();
+            // -------- SESSION --------
+            localStorage.setItem("isLoggedIn", "true");
+            localStorage.setItem("regno", regno);
+            localStorage.setItem("userName", data.name);
+            localStorage.setItem("userRole", data.role);
 
-    if(user){
-        // -------- SESSION --------
-        localStorage.setItem("isLoggedIn", "true");
-        localStorage.setItem("regno", regno);
-
-        // -------- REDIRECT --------
-        window.location.href = "dashbord.html";
-    }else{
-        error.innerText = "Invalid Registration Number or Password!";
+            // -------- REDIRECT --------
+            window.location.href = "dashbord.html";
+        } else {
+            const errData = await response.json();
+            error.innerText = errData.message || "Invalid Registration Number or Password!";
+        }
+    } catch (err) {
+        console.error(err);
+        error.innerText = "Network error. Server might be down.";
     }
 });

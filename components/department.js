@@ -13,8 +13,25 @@ window.onpopstate = function () {
 window.onload = function () {
     if (!localStorage.getItem("isLoggedIn")) {
         window.location.href = "login.html";
+    } else {
+        fetchDepartments();
     }
 };
+
+async function fetchDepartments() {
+    try {
+        const response = await fetch("http://localhost:8080/api/departments");
+        if (response.ok) {
+            const departments = await response.json();
+            console.log("Departments loaded from backend:", departments);
+            // Ready to be populated in the UI when needed
+        } else {
+            console.error("Failed to fetch departments. Status:", response.status);
+        }
+    } catch (err) {
+        console.error("Network error. Backend might be down.", err);
+    }
+}
 
 
 const slider = document.getElementById("slider");
