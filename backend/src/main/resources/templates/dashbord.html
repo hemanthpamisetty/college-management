@@ -1,24 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="RGMCET Student Dashboard — View your academic records, attendance, and campus updates.">
   <title>Dashboard — RGMCET Student Portal</title>
-  <link rel="icon" href="/images/clglogo.png">
+  <link rel="icon" th:href="@{/images/clglogo.png}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link rel="stylesheet" href="../css/dashbord.css">
+  <link rel="stylesheet" th:href="@{/css/dashbord.css}">
 </head>
 <body>
-
-<!-- ===== Session Guard ===== -->
-<script>
-  if (localStorage.getItem('isLoggedIn') !== 'true') {
-    window.location.href = 'login.html';
-  }
-</script>
 
 <!-- ===== SIDEBAR ===== -->
 <aside class="sidebar" id="sidebar">
@@ -29,10 +22,10 @@
 
   <nav class="sidebar-nav">
     <div class="nav-group-title">Main</div>
-    <a href="#" class="nav-item active" id="nav-dashboard">
+    <a th:href="@{/dashboard}" class="nav-item active" id="nav-dashboard">
       <i class="fa-solid fa-house"></i> Dashboard
     </a>
-    <a href="../components/department.html" class="nav-item" id="nav-departments">
+    <a th:href="@{/departments}" class="nav-item" id="nav-departments">
       <i class="fa-solid fa-building-columns"></i> Departments
     </a>
     <a href="#" class="nav-item" id="nav-services">
@@ -68,10 +61,10 @@
 
   <div class="sidebar-footer">
     <div class="sidebar-user" id="sidebar-user-btn">
-      <div class="sidebar-avatar" id="userAvatarSidebar">S</div>
+      <div class="sidebar-avatar" id="userAvatarSidebar" th:text="${#authentication.name.substring(0,1).toUpperCase()}">S</div>
       <div class="sidebar-user-info">
-        <div class="sidebar-user-name" id="sidebarUserName">Student</div>
-        <div class="sidebar-user-role">B.Tech Student</div>
+        <div class="sidebar-user-name" id="sidebarUserName" th:text="${#authentication.name}">Student</div>
+        <div class="sidebar-user-role">Student</div>
       </div>
       <i class="fa-solid fa-ellipsis-vertical" style="color:rgba(255,255,255,.4);font-size:14px;"></i>
     </div>
@@ -93,7 +86,7 @@
       </button>
       <div>
         <div class="topbar-title" id="topbarTitle">Dashboard</div>
-        <div class="topbar-sub">Welcome back, <span id="topbarStudent">Student</span>!</div>
+        <div class="topbar-sub">Welcome back, <span id="topbarStudent" th:text="${#authentication.name}">Student</span>!</div>
       </div>
     </div>
     <div class="topbar-right">
@@ -108,10 +101,10 @@
         <i class="fa-solid fa-circle-half-stroke"></i>
       </button>
       <div style="display:flex;align-items:center;gap:8px;padding:0 4px;">
-        <div class="topbar-avatar" id="userAvatarTop">S</div>
+        <div class="topbar-avatar" id="userAvatarTop" th:text="${#authentication.name.substring(0,1).toUpperCase()}">S</div>
         <div>
-          <div class="topbar-user-name" id="topbarUserName">Student</div>
-          <div class="topbar-user-role">B.Tech</div>
+          <div class="topbar-user-name" id="topbarUserName" th:text="${#authentication.name}">Student</div>
+          <div class="topbar-user-role">Student</div>
         </div>
       </div>
       <!-- Account Dropdown -->
@@ -136,7 +129,8 @@
             <i class="fa-solid fa-key" style="color:#06B6D4;width:18px;"></i> Change Password
           </a>
           <hr style="border:none;border-top:1px solid #f1f5f9;margin:6px 0;">
-          <a href="../components/interface.html" onclick="logout()"
+          <form th:action="@{/logout}" method="POST" id="logoutForm" style="display:none;"></form>
+          <a href="javascript:void(0)" onclick="document.getElementById('logoutForm').submit()"
              style="display:flex;align-items:center;gap:10px;padding:10px 12px;
              border-radius:10px;color:#ef4444;font-size:14px;font-weight:500;text-decoration:none;"
              onmouseover="this.style.background='#fef2f2'" onmouseout="this.style.background='none'">
@@ -153,10 +147,10 @@
     <!-- Welcome Banner -->
     <div class="welcome-banner">
       <div>
-        <h2>Good day, <span id="bannerName">Student</span>! 👋</h2>
+        <h2>Good day, <span th:text="${#authentication.name}">Student</span>! 👋</h2>
         <p>You have <strong>3 upcoming events</strong> and <strong>1 new notification</strong> waiting for you.</p>
       </div>
-      <a href="../components/department.html" class="welcome-btn">
+      <a th:href="@{/departments}" class="welcome-btn">
         <i class="fa-solid fa-building-columns"></i> &nbsp;View Departments
       </a>
     </div>
@@ -200,7 +194,7 @@
     <!-- Quick Actions -->
     <div class="section-label">Quick Access</div>
     <div class="quick-grid">
-      <a href="../components/department.html" class="quick-card">
+      <a th:href="@{/departments}" class="quick-card">
         <div class="quick-icon"><i class="fa-solid fa-building-columns"></i></div>
         <h4>Departments</h4>
         <p>Browse all academic branches</p>
@@ -300,27 +294,7 @@
 </div>
 
 <!-- Scripts -->
-<script src="../components/security.js"></script>
 <script>
-  // ---- Load student name ----
-  const regNo = localStorage.getItem('regNo') || 'Student';
-  const initial = regNo.charAt(0).toUpperCase();
-  ['userAvatarSidebar','userAvatarTop'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.textContent = initial;
-  });
-  ['sidebarUserName','topbarUserName','topbarStudent','bannerName'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.textContent = regNo;
-  });
-
-  // ---- Logout ----
-  function logout() {
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('regNo');
-    window.location.href = '../components/interface.html';
-  }
-
   // ---- Sidebar toggle (mobile) ----
   const sidebarEl  = document.getElementById('sidebar');
   const overlayEl  = document.getElementById('sidebarOverlay');
@@ -367,9 +341,6 @@
   });
   if (localStorage.getItem('darkMode') === 'true') applyDark(true);
 
-  // ---- Back-nav block ----
-  history.pushState(null, null, location.href);
-  window.onpopstate = () => { window.location.href = '../components/dashbord.html'; };
 </script>
 </body>
 </html>

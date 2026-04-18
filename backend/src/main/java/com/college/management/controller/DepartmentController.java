@@ -2,7 +2,6 @@ package com.college.management.controller;
 
 import com.college.management.entity.Department;
 import com.college.management.service.DepartmentService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,10 +13,13 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/departments")
-@RequiredArgsConstructor
 public class DepartmentController {
 
     private final DepartmentService departmentService;
+
+    public DepartmentController(DepartmentService departmentService) {
+        this.departmentService = departmentService;
+    }
 
     @GetMapping
     public ResponseEntity<List<Department>> getAllDepartments() {

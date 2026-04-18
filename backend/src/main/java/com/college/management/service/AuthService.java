@@ -5,16 +5,19 @@ import com.college.management.dto.AuthResponse;
 import com.college.management.dto.RegisterRequest;
 import com.college.management.entity.User;
 import com.college.management.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 public class AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
+    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     public AuthResponse registerUser(RegisterRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {

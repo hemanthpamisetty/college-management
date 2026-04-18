@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Rajeev Gandhi Memorial College of Engineering and Technology — Empowering futures through excellence in education, research, and innovation.">
   <title>RGMCET — Rajeev Gandhi Memorial College of Engineering & Technology</title>
-  <link rel="icon" href="/images/clglogo.png">
+  <link rel="icon" th:href="@{/images/clglogo.png}">
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -14,7 +14,7 @@
   <!-- AOS -->
   <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
   <!-- Main CSS -->
-  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
 
@@ -38,7 +38,7 @@
      NAVBAR — GLASSMORPHISM
      ============================================================ -->
 <nav class="navbar" id="mainNavbar">
-  <a href="#" class="clogo">
+  <a th:href="@{/}" class="clogo">
     <i class="fa-solid fa-graduation-cap" style="font-size:26px;color:#06B6D4;-webkit-text-fill-color:#06B6D4;"></i>
     RGMCET
   </a>
@@ -49,7 +49,7 @@
     <li><a href="#departments"><i class="fa-solid fa-building-columns"></i> Departments</a></li>
     <li><a href="#events"><i class="fa-solid fa-calendar-star"></i> Events</a></li>
     <li><a href="#gallery"><i class="fa-solid fa-images"></i> Gallery</a></li>
-    <li><a href="../components/login.html" id="loginNavBtn"
+    <li><a th:href="@{/login}" id="loginNavBtn"
          style="background:linear-gradient(135deg,#4F46E5,#06B6D4);color:#fff;border-radius:999px;padding:10px 22px;">
          <i class="fa-solid fa-arrow-right-to-bracket"></i> Login
     </a></li>
@@ -85,7 +85,7 @@
       engineers and innovators since 1997. Education with Peace.
     </p>
     <div class="hero-btns">
-      <a href="../components/login.html" class="btn-primary-hero" id="hero-cta-login">
+      <a th:href="@{/login}" class="btn-primary-hero" id="hero-cta-login">
         <i class="fa-solid fa-arrow-right-to-bracket"></i> Student Portal
       </a>
       <a href="#departments" class="btn-outline-hero">
@@ -193,7 +193,7 @@
       </div>
     </div>
     <div style="text-align:center;margin-top:40px;" data-aos="fade-up">
-      <a href="../components/department.html" class="btn-primary-hero" style="display:inline-flex;">
+      <a th:href="@{/departments}" class="btn-primary-hero" style="display:inline-flex;">
         <i class="fa-solid fa-arrow-right"></i> View All Departments
       </a>
     </div>
@@ -259,27 +259,27 @@
     </div>
     <div class="gallery-grid">
       <div class="gallery-item" data-aos="zoom-in" data-aos-delay="0">
-        <img src="../images/image2.png" alt="RGMCET Campus">
+        <img th:src="@{/images/image2.png}" alt="RGMCET Campus">
         <div class="gallery-overlay"><span><i class="fa-solid fa-image"></i> Campus View</span></div>
       </div>
       <div class="gallery-item" data-aos="zoom-in" data-aos-delay="100">
-        <img src="../images/cse.png" alt="CSE Lab">
+        <img th:src="@{/images/cse.png}" alt="CSE Lab">
         <div class="gallery-overlay"><span><i class="fa-solid fa-image"></i> CSE Laboratory</span></div>
       </div>
       <div class="gallery-item" data-aos="zoom-in" data-aos-delay="200">
-        <img src="../images/ece.png" alt="ECE Lab">
+        <img th:src="@{/images/ece.png}" alt="ECE Lab">
         <div class="gallery-overlay"><span><i class="fa-solid fa-image"></i> Electronics Lab</span></div>
       </div>
       <div class="gallery-item" data-aos="zoom-in" data-aos-delay="100">
-        <img src="../images/mech.png" alt="Mechanical Lab">
+        <img th:src="@{/images/mech.png}" alt="Mechanical Lab">
         <div class="gallery-overlay"><span><i class="fa-solid fa-image"></i> Mechanical Workshop</span></div>
       </div>
       <div class="gallery-item" data-aos="zoom-in" data-aos-delay="200">
-        <img src="../images/civil.png" alt="Civil Lab">
+        <img th:src="@{/images/civil.png}" alt="Civil Lab">
         <div class="gallery-overlay"><span><i class="fa-solid fa-image"></i> Civil Engineering</span></div>
       </div>
       <div class="gallery-item" data-aos="zoom-in" data-aos-delay="300">
-        <img src="../images/aiml.png" alt="AI Lab">
+        <img th:src="@{/images/aiml.png}" alt="AI Lab">
         <div class="gallery-overlay"><span><i class="fa-solid fa-image"></i> AI &amp; ML Lab</span></div>
       </div>
     </div>
@@ -315,10 +315,10 @@
     <div class="footer-col">
       <h4>Student Portal</h4>
       <ul>
-        <li><a href="../components/login.html">Login</a></li>
-        <li><a href="../components/register.html">Register</a></li>
-        <li><a href="../components/dashbord.html">Dashboard</a></li>
-        <li><a href="../components/department.html">Departments</a></li>
+        <li><a th:href="@{/login}">Login</a></li>
+        <li><a th:href="@{/register}">Register</a></li>
+        <li><a th:href="@{/dashboard}">Dashboard</a></li>
+        <li><a th:href="@{/departments}">Departments</a></li>
       </ul>
     </div>
     <div class="footer-col">

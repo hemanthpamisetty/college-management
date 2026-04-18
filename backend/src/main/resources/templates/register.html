@@ -1,16 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Create your RGMCET Student Portal account — Register to access academic services.">
   <title>Register — RGMCET Student Portal</title>
-  <link rel="icon" href="/images/clglogo.png">
+  <link rel="icon" th:href="@{/images/clglogo.png}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <!-- login.css contains all shared auth styles; register.css flips panel to right -->
-  <link rel="stylesheet" href="../css/login.css">
+  <link rel="stylesheet" th:href="@{/css/login.css}">
   <style>
     /* Panel on the right for register page */
     body { flex-direction: row-reverse; }
@@ -54,13 +53,15 @@
       <p>Register to join the RGMCET student portal</p>
     </div>
 
-    <form id="registerForm" autocomplete="off">
+    <form th:action="@{/register}" th:object="${registerRequest}" method="POST" autocomplete="off">
+        <input type="hidden" name="role" value="STUDENT" />
+        <input type="hidden" th:field="*{name}" id="nameHidden" />
 
       <div class="form-field">
         <label for="emailInput"><i class="fa-solid fa-envelope" style="margin-right:6px;color:#4F46E5;"></i>Email Address</label>
         <div class="input-wrapper">
           <i class="fa-solid fa-at"></i>
-          <input type="email" class="form-input" id="emailInput" placeholder="name@example.com" required autocomplete="off">
+          <input type="email" class="form-input" th:field="*{email}" placeholder="name@example.com" required autocomplete="off">
         </div>
       </div>
 
@@ -68,7 +69,7 @@
         <label for="textInput"><i class="fa-solid fa-id-card" style="margin-right:6px;color:#4F46E5;"></i>Registration Number</label>
         <div class="input-wrapper">
           <i class="fa-solid fa-hashtag"></i>
-          <input type="text" class="form-input" id="textInput" placeholder="e.g. 22A91A0501" required autocomplete="off">
+          <input type="text" class="form-input" th:field="*{registrationNumber}" id="textInput" placeholder="e.g. 22A91A0501" required autocomplete="off" oninput="document.getElementById('nameHidden').value = this.value">
         </div>
       </div>
 
@@ -76,7 +77,7 @@
         <label for="passwordInput"><i class="fa-solid fa-lock" style="margin-right:6px;color:#4F46E5;"></i>Set Password</label>
         <div class="input-wrapper" style="position:relative;">
           <i class="fa-solid fa-key"></i>
-          <input type="password" class="form-input" id="passwordInput" placeholder="Create a strong password" required>
+          <input type="password" class="form-input" th:field="*{password}" id="passwordInput" placeholder="Create a strong password" required>
           <button type="button"
             style="position:absolute;right:14px;background:none;border:none;cursor:pointer;color:#94a3b8;font-size:15px;"
             onclick="togglePassword()">
@@ -90,18 +91,17 @@
         <p id="strengthText" style="font-size:11px;color:#94a3b8;margin-top:4px;"></p>
       </div>
 
-      <p id="error"   style="color:#ef4444;font-size:13px;min-height:18px;margin-bottom:4px;"></p>
-      <p id="success" style="color:#10b981;font-size:13px;min-height:18px;margin-bottom:8px;"></p>
+      <p th:if="${error}" th:text="${error}" style="color:#ef4444;font-size:13px;min-height:18px;margin-bottom:4px;"></p>
 
       <button type="submit" class="btn-submit" id="Register_button">
         <i class="fa-solid fa-user-plus"></i> &nbsp;Create Account
       </button>
 
       <p class="auth-alt" style="margin-top:20px;">
-        Already have an account? <a href="../components/login.html">Sign in →</a>
+        Already have an account? <a th:href="@{/login}">Sign in →</a>
       </p>
       <p class="auth-alt">
-        <a href="../components/interface.html" style="color:#64748b;">
+        <a th:href="@{/}" style="color:#64748b;">
           <i class="fa-solid fa-arrow-left"></i> Back to Home
         </a>
       </p>
@@ -110,7 +110,6 @@
 </div>
 
 <!-- ===== Scripts ===== -->
-<script src="../components/register.js"></script>
 <script>
   // Password toggle
   function togglePassword() {
@@ -152,10 +151,6 @@
     container.appendChild(t);
     setTimeout(() => t.remove(), 3500);
   }
-
-  // Block back-nav
-  history.pushState(null, null, location.href);
-  window.onpopstate = () => { window.location.href = '../components/login.html'; };
 </script>
 </body>
 </html>
