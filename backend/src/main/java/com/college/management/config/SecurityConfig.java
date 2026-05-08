@@ -18,6 +18,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable()) // Disable CSRF for simplicity in this demo, though not recommended for production
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/", "/login", "/register", "/css/**", "/images/**", "/js/**", "/api/auth/**").permitAll()
+                .requestMatchers("/api/timetable/**").authenticated()
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
@@ -32,6 +33,8 @@ public class SecurityConfig {
             .logout(logout -> logout
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login?logout=true")
+                .deleteCookies("JSESSIONID")
+                .invalidateHttpSession(true)
                 .permitAll()
             );
 

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Examinations — RGMCET Student Portal</title>
+  <link rel="icon" th:href="@{/images/clglogo.png}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" th:href="@{/css/dashbord.css}">
+  <style>
+    .exam-card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:20px 24px; display:flex; align-items:center; gap:20px; transition:var(--transition); margin-bottom:12px; }
+    .exam-card:hover { box-shadow:var(--shadow-md); transform:translateY(-2px); }
+    .exam-date-box { min-width:72px; height:72px; border-radius:14px; display:flex; flex-direction:column; align-items:center; justify-content:center; font-weight:800; background:var(--gradient); color:#fff; }
+    .exam-day { font-size:1.8rem; line-height:1; }
+    .exam-mon { font-size:11px; opacity:.85; text-transform:uppercase; }
+    .exam-info { flex:1; }
+    .exam-sub  { font-size:16px; font-weight:700; color:var(--text-primary); margin-bottom:4px; }
+    .exam-meta { font-size:13px; color:var(--text-secondary); display:flex; gap:18px; flex-wrap:wrap; }
+    .exam-meta span { display:flex; align-items:center; gap:6px; }
+    .countdown { background:rgba(79,70,229,.08); border:1px solid rgba(79,70,229,.18); border-radius:10px; padding:6px 14px; font-size:13px; font-weight:700; color:var(--primary); white-space:nowrap; }
+    .hall-ticket-box { background:linear-gradient(135deg,#1e1b4b,#0f172a); border-radius:var(--radius-lg); padding:32px; color:#fff; position:relative; overflow:hidden; }
+    .hall-ticket-box::before { content:''; position:absolute; right:-30px; top:-30px; width:150px; height:150px; border-radius:50%; background:rgba(255,255,255,.05); }
+    .ht-field { margin-bottom:14px; }
+    .ht-label { font-size:11px; opacity:.5; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px; }
+    .ht-value { font-size:15px; font-weight:700; }
+  </style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <i class="fa-solid fa-graduation-cap" style="font-size:24px;color:#67e8f9;"></i>
+    <div class="sidebar-logo">RGM<span>CET</span></div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-group-title">Main</div>
+    <a th:href="@{/dashboard}" class="nav-item"><i class="fa-solid fa-house"></i> Dashboard</a>
+    <a th:href="@{/departments}" class="nav-item"><i class="fa-solid fa-building-columns"></i> Departments</a>
+    <a th:href="@{/services}" class="nav-item"><i class="fa-solid fa-grid-2"></i> Services</a>
+    <div class="nav-group-title">Academics</div>
+    <a th:href="@{/timetable}" class="nav-item"><i class="fa-solid fa-calendar-days"></i> Timetable</a>
+    <a th:href="@{/attendance}" class="nav-item"><i class="fa-solid fa-clipboard-check"></i> Attendance</a>
+    <a th:href="@{/results}" class="nav-item"><i class="fa-solid fa-chart-bar"></i> Results</a>
+    <a th:href="@{/examinations}" class="nav-item active"><i class="fa-solid fa-file-pen"></i> Examinations</a>
+    <div class="nav-group-title">Campus</div>
+    <a th:href="@{/events}" class="nav-item"><i class="fa-solid fa-calendar-star"></i> Events</a>
+    <a th:href="@{/library}" class="nav-item"><i class="fa-solid fa-book"></i> Library</a>
+    <a th:href="@{/fees}" class="nav-item"><i class="fa-solid fa-receipt"></i> Fee Portal</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-user">
+      <div class="sidebar-avatar" th:text="${#authentication.name.substring(0,1).toUpperCase()}">S</div>
+      <div class="sidebar-user-info">
+        <div class="sidebar-user-name" th:text="${#authentication.name}">Student</div>
+        <div class="sidebar-user-role">Student</div>
+      </div>
+    </div>
+  </div>
+</aside>
+<div id="sidebarOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:199;" onclick="closeSidebar()"></div>
+
+<div class="main">
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="sidebar-toggle" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
+      <div>
+        <div class="topbar-title">Examinations</div>
+        <div class="topbar-sub">Semester End Exam — June 2026</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <button class="topbar-icon-btn" id="darkToggleBtn"><i class="fa-solid fa-circle-half-stroke"></i></button>
+      <div class="topbar-avatar" th:text="${#authentication.name.substring(0,1).toUpperCase()}">S</div>
+      <div style="position:relative;">
+        <button class="topbar-icon-btn" id="accountMenuBtn"><i class="fa-solid fa-chevron-down"></i></button>
+        <div id="accountDropdown" style="display:none;position:absolute;right:0;top:calc(100% + 8px);background:#fff;border:1px solid rgba(79,70,229,.12);border-radius:14px;padding:8px;min-width:200px;box-shadow:0 20px 60px rgba(0,0,0,.12);z-index:300;">
+          <form th:action="@{/logout}" method="POST" id="logoutForm" style="display:none;"></form>
+          <a href="javascript:void(0)" onclick="document.getElementById('logoutForm').submit()" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;color:#ef4444;font-size:14px;font-weight:500;text-decoration:none;" onmouseover="this.style.background='#fef2f2'" onmouseout="this.style.background='none'">
+            <i class="fa-solid fa-arrow-right-from-bracket" style="width:18px;"></i> Logout
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-body">
+    <div class="stats-row" style="margin-bottom:28px;">
+      <div class="stat-card">
+        <div class="stat-icon indigo"><i class="fa-solid fa-file-pen"></i></div>
+        <div><div class="stat-value">6</div><div class="stat-label">Subjects</div><div class="stat-delta" style="color:#4F46E5;"><i class="fa-solid fa-calendar"></i> June 20–July 2</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon amber"><i class="fa-solid fa-clock"></i></div>
+        <div><div class="stat-value" id="daysLeft">53</div><div class="stat-label">Days to Exams</div><div class="stat-delta up"><i class="fa-solid fa-triangle-exclamation"></i> Prepare early!</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon green"><i class="fa-solid fa-id-card"></i></div>
+        <div><div class="stat-value">Ready</div><div class="stat-label">Hall Ticket</div><div class="stat-delta up"><i class="fa-solid fa-check"></i> Available for download</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon cyan"><i class="fa-solid fa-chair"></i></div>
+        <div><div class="stat-value">A-12</div><div class="stat-label">Exam Hall</div><div class="stat-delta"><i class="fa-solid fa-location-dot"></i> Block A, 1st Floor</div></div>
+      </div>
+    </div>
+
+    <div class="two-col" style="margin-bottom:28px;">
+      <!-- Exam Schedule -->
+      <div>
+        <div class="dash-card-title" style="margin-bottom:16px;"><i class="fa-solid fa-calendar-days" style="color:#4F46E5;margin-right:8px;"></i>Exam Schedule</div>
+        <div class="exam-card">
+          <div class="exam-date-box"><div class="exam-day">20</div><div class="exam-mon">Jun</div></div>
+          <div class="exam-info">
+            <div class="exam-sub">Data Structures</div>
+            <div class="exam-meta"><span><i class="fa-solid fa-clock"></i>9:00 AM – 12:00 PM</span><span><i class="fa-solid fa-location-dot"></i>Hall A-12</span></div>
+          </div>
+          <div class="countdown" id="cd1">Loading...</div>
+        </div>
+        <div class="exam-card">
+          <div class="exam-date-box" style="background:linear-gradient(135deg,#06B6D4,#10b981);"><div class="exam-day">22</div><div class="exam-mon">Jun</div></div>
+          <div class="exam-info">
+            <div class="exam-sub">Operating Systems</div>
+            <div class="exam-meta"><span><i class="fa-solid fa-clock"></i>9:00 AM – 12:00 PM</span><span><i class="fa-solid fa-location-dot"></i>Hall A-12</span></div>
+          </div>
+        </div>
+        <div class="exam-card">
+          <div class="exam-date-box" style="background:linear-gradient(135deg,#10b981,#4F46E5);"><div class="exam-day">24</div><div class="exam-mon">Jun</div></div>
+          <div class="exam-info">
+            <div class="exam-sub">Mathematics III</div>
+            <div class="exam-meta"><span><i class="fa-solid fa-clock"></i>9:00 AM – 12:00 PM</span><span><i class="fa-solid fa-location-dot"></i>Hall A-12</span></div>
+          </div>
+        </div>
+        <div class="exam-card">
+          <div class="exam-date-box" style="background:linear-gradient(135deg,#f43f5e,#f59e0b);"><div class="exam-day">26</div><div class="exam-mon">Jun</div></div>
+          <div class="exam-info">
+            <div class="exam-sub">Database Management Systems</div>
+            <div class="exam-meta"><span><i class="fa-solid fa-clock"></i>9:00 AM – 12:00 PM</span><span><i class="fa-solid fa-location-dot"></i>Hall A-12</span></div>
+          </div>
+        </div>
+        <div class="exam-card">
+          <div class="exam-date-box" style="background:linear-gradient(135deg,#f59e0b,#f43f5e);"><div class="exam-day">28</div><div class="exam-mon">Jun</div></div>
+          <div class="exam-info">
+            <div class="exam-sub">Computer Networks</div>
+            <div class="exam-meta"><span><i class="fa-solid fa-clock"></i>9:00 AM – 12:00 PM</span><span><i class="fa-solid fa-location-dot"></i>Hall A-12</span></div>
+          </div>
+        </div>
+        <div class="exam-card">
+          <div class="exam-date-box" style="background:linear-gradient(135deg,#8b5cf6,#4F46E5);"><div class="exam-day">02</div><div class="exam-mon">Jul</div></div>
+          <div class="exam-info">
+            <div class="exam-sub">Software Engineering</div>
+            <div class="exam-meta"><span><i class="fa-solid fa-clock"></i>9:00 AM – 12:00 PM</span><span><i class="fa-solid fa-location-dot"></i>Hall A-12</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hall Ticket Preview -->
+      <div>
+        <div class="dash-card-title" style="margin-bottom:16px;"><i class="fa-solid fa-id-card" style="color:#06B6D4;margin-right:8px;"></i>Hall Ticket</div>
+        <div class="hall-ticket-box">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;flex-wrap:wrap;gap:10px;">
+            <div>
+              <div style="font-size:18px;font-weight:900;background:linear-gradient(135deg,#a5b4fc,#67e8f9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">RGMCET</div>
+              <div style="font-size:11px;opacity:.5;">Rajiv Gandhi Memorial College of Engineering &amp; Technology</div>
+            </div>
+            <div style="background:rgba(255,255,255,.1);border-radius:8px;width:48px;height:48px;display:flex;align-items:center;justify-content:center;">
+              <i class="fa-solid fa-graduation-cap" style="font-size:22px;color:#67e8f9;"></i>
+            </div>
+          </div>
+          <div style="font-size:13px;font-weight:700;opacity:.5;text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;">HALL TICKET — SEMESTER IV</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div class="ht-field"><div class="ht-label">Student Name</div><div class="ht-value" th:text="${#authentication.name}">Student Name</div></div>
+            <div class="ht-field"><div class="ht-label">Roll Number</div><div class="ht-value">21CS1A0512</div></div>
+            <div class="ht-field"><div class="ht-label">Branch</div><div class="ht-value">B.Tech CSE</div></div>
+            <div class="ht-field"><div class="ht-label">Section</div><div class="ht-value">CS-4A</div></div>
+            <div class="ht-field"><div class="ht-label">Exam Hall</div><div class="ht-value">Hall A-12</div></div>
+            <div class="ht-field"><div class="ht-label">Academic Year</div><div class="ht-value">2025–2026</div></div>
+          </div>
+          <button style="margin-top:24px;width:100%;padding:12px;border-radius:999px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;font-size:14px;font-weight:700;cursor:pointer;transition:all .3s;" onmouseover="this.style.background='rgba(255,255,255,.25)'" onmouseout="this.style.background='rgba(255,255,255,.15)'">
+            <i class="fa-solid fa-download" style="margin-right:8px;"></i>Download Hall Ticket PDF
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  // Countdown to first exam (June 20, 2026)
+  function updateCountdown(){
+    const examDate=new Date('2026-06-20T09:00:00');
+    const now=new Date();
+    const diff=examDate-now;
+    if(diff>0){
+      const days=Math.floor(diff/86400000);
+      document.getElementById('daysLeft').textContent=days;
+      const cd1=document.getElementById('cd1');
+      if(cd1)cd1.textContent=days+' days';
+    }
+  }
+  updateCountdown();
+  setInterval(updateCountdown,60000);
+  const sidebarEl=document.getElementById('sidebar'),overlayEl=document.getElementById('sidebarOverlay');
+  document.getElementById('sidebarToggle').addEventListener('click',()=>{sidebarEl.classList.toggle('open');overlayEl.style.display=sidebarEl.classList.contains('open')?'block':'none';});
+  function closeSidebar(){sidebarEl.classList.remove('open');overlayEl.style.display='none';}
+  const accountBtn=document.getElementById('accountMenuBtn'),accountDropdown=document.getElementById('accountDropdown');
+  accountBtn.addEventListener('click',e=>{e.stopPropagation();accountDropdown.style.display=accountDropdown.style.display==='none'?'block':'none';});
+  document.addEventListener('click',()=>{accountDropdown.style.display='none';});
+  const darkBtn=document.getElementById('darkToggleBtn');
+  function applyDark(on){document.body.classList.toggle('dark-mode-dash',on);darkBtn.querySelector('i').className=on?'fa-solid fa-sun':'fa-solid fa-circle-half-stroke';}
+  darkBtn.addEventListener('click',()=>{const on=!document.body.classList.contains('dark-mode-dash');applyDark(on);localStorage.setItem('darkMode',on);});
+  if(localStorage.getItem('darkMode')==='true')applyDark(true);
+</script>
+</body>
+</html>

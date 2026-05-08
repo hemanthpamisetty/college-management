@@ -28,33 +28,33 @@
     <a th:href="@{/departments}" class="nav-item" id="nav-departments">
       <i class="fa-solid fa-building-columns"></i> Departments
     </a>
-    <a href="#" class="nav-item" id="nav-services">
+    <a th:href="@{/services}" class="nav-item" id="nav-services">
       <i class="fa-solid fa-grid-2"></i> Services
     </a>
 
     <div class="nav-group-title">Academics</div>
-    <a href="#" class="nav-item" id="nav-schedule">
+    <a th:href="@{/timetable}" class="nav-item" id="nav-schedule">
       <i class="fa-solid fa-calendar-days"></i> Timetable
     </a>
-    <a href="#" class="nav-item" id="nav-attendance">
+    <a th:href="@{/attendance}" class="nav-item" id="nav-attendance">
       <i class="fa-solid fa-clipboard-check"></i> Attendance
       <span class="nav-badge">New</span>
     </a>
-    <a href="#" class="nav-item" id="nav-results">
+    <a th:href="@{/results}" class="nav-item" id="nav-results">
       <i class="fa-solid fa-chart-bar"></i> Results
     </a>
-    <a href="#" class="nav-item" id="nav-exams">
+    <a th:href="@{/examinations}" class="nav-item" id="nav-exams">
       <i class="fa-solid fa-file-pen"></i> Examinations
     </a>
 
     <div class="nav-group-title">Campus</div>
-    <a href="#" class="nav-item" id="nav-events">
+    <a th:href="@{/events}" class="nav-item" id="nav-events">
       <i class="fa-solid fa-calendar-star"></i> Events
     </a>
-    <a href="#" class="nav-item" id="nav-library">
+    <a th:href="@{/library}" class="nav-item" id="nav-library">
       <i class="fa-solid fa-book"></i> Library
     </a>
-    <a href="#" class="nav-item" id="nav-fees">
+    <a th:href="@{/fees}" class="nav-item" id="nav-fees">
       <i class="fa-solid fa-receipt"></i> Fee Portal
     </a>
   </nav>
@@ -199,27 +199,27 @@
         <h4>Departments</h4>
         <p>Browse all academic branches</p>
       </a>
-      <a href="#" class="quick-card">
+      <a th:href="@{/timetable}" class="quick-card">
         <div class="quick-icon"><i class="fa-solid fa-calendar-days"></i></div>
         <h4>Timetable</h4>
         <p>View your class schedule</p>
       </a>
-      <a href="#" class="quick-card">
+      <a th:href="@{/results}" class="quick-card">
         <div class="quick-icon"><i class="fa-solid fa-chart-bar"></i></div>
         <h4>Results</h4>
         <p>Check semester grades</p>
       </a>
-      <a href="#" class="quick-card">
+      <a th:href="@{/fees}" class="quick-card">
         <div class="quick-icon"><i class="fa-solid fa-receipt"></i></div>
         <h4>Fee Portal</h4>
         <p>View &amp; pay college fees</p>
       </a>
-      <a href="#" class="quick-card">
+      <a th:href="@{/examinations}" class="quick-card">
         <div class="quick-icon"><i class="fa-solid fa-file-pen"></i></div>
         <h4>Examinations</h4>
         <p>Hall tickets &amp; schedules</p>
       </a>
-      <a href="#" class="quick-card">
+      <a th:href="@{/library}" class="quick-card">
         <div class="quick-icon"><i class="fa-solid fa-book"></i></div>
         <h4>Library</h4>
         <p>Search books &amp; e-resources</p>

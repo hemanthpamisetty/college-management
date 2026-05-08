@@ -24,6 +24,10 @@ public class RegisterRequest {
     
     private String facultyId; // Required if Role is FACULTY
 
+    private String department; // e.g., "CSE", "ECE"
+    private String section;    // e.g., "A", "B"
+    private Integer semester;  // e.g., 1-8
+
     public RegisterRequest() {}
 
     public String getName() { return name; }
@@ -38,4 +42,10 @@ public class RegisterRequest {
     public void setRegistrationNumber(String registrationNumber) { this.registrationNumber = registrationNumber; }
     public String getFacultyId() { return facultyId; }
     public void setFacultyId(String facultyId) { this.facultyId = facultyId; }
+    public String getDepartment() { return department; }
+    public void setDepartment(String department) { this.department = department; }
+    public String getSection() { return section; }
+    public void setSection(String section) { this.section = section; }
+    public Integer getSemester() { return semester; }
+    public void setSemester(Integer semester) { this.semester = semester; }
 }

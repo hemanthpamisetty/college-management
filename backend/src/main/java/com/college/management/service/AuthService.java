@@ -31,6 +31,9 @@ public class AuthService {
                 .role(request.getRole())
                 .registrationNumber(request.getRegistrationNumber())
                 .facultyId(request.getFacultyId())
+                .department(request.getDepartment())
+                .section(request.getSection())
+                .semester(request.getSemester())
                 .build();
 
         User savedUser = userRepository.save(user);

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Events — RGMCET Student Portal</title>
+  <link rel="icon" th:href="@{/images/clglogo.png}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" th:href="@{/css/dashbord.css}">
+  <style>
+    .event-card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); overflow:hidden; transition:var(--transition); }
+    .event-card:hover { transform:translateY(-4px); box-shadow:var(--shadow-md); }
+    .event-banner { height:10px; }
+    .event-body { padding:20px; }
+    .event-tag { display:inline-block; padding:4px 12px; border-radius:999px; font-size:11px; font-weight:700; margin-bottom:10px; }
+    .tag-tech   { background:rgba(79,70,229,.12); color:#4F46E5; }
+    .tag-cultural{background:rgba(245,158,11,.12); color:#f59e0b; }
+    .tag-sport  { background:rgba(16,185,129,.12); color:#10b981; }
+    .tag-career { background:rgba(6,182,212,.12); color:#06B6D4; }
+    .event-title { font-size:15px; font-weight:700; color:var(--text-primary); margin-bottom:8px; }
+    .event-meta  { font-size:12px; color:var(--text-secondary); display:flex; flex-direction:column; gap:4px; margin-bottom:14px; }
+    .event-meta span { display:flex; align-items:center; gap:6px; }
+    .event-btn { width:100%; padding:10px; border-radius:999px; border:1px solid var(--primary); color:var(--primary); background:transparent; font-size:13px; font-weight:600; cursor:pointer; transition:var(--transition); }
+    .event-btn:hover { background:var(--primary); color:#fff; }
+    .event-btn.registered { background:linear-gradient(135deg,#4F46E5,#06B6D4); color:#fff; border-color:transparent; }
+    .events-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:20px; }
+  </style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <i class="fa-solid fa-graduation-cap" style="font-size:24px;color:#67e8f9;"></i>
+    <div class="sidebar-logo">RGM<span>CET</span></div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-group-title">Main</div>
+    <a th:href="@{/dashboard}" class="nav-item"><i class="fa-solid fa-house"></i> Dashboard</a>
+    <a th:href="@{/departments}" class="nav-item"><i class="fa-solid fa-building-columns"></i> Departments</a>
+    <a th:href="@{/services}" class="nav-item"><i class="fa-solid fa-grid-2"></i> Services</a>
+    <div class="nav-group-title">Academics</div>
+    <a th:href="@{/timetable}" class="nav-item"><i class="fa-solid fa-calendar-days"></i> Timetable</a>
+    <a th:href="@{/attendance}" class="nav-item"><i class="fa-solid fa-clipboard-check"></i> Attendance</a>
+    <a th:href="@{/results}" class="nav-item"><i class="fa-solid fa-chart-bar"></i> Results</a>
+    <a th:href="@{/examinations}" class="nav-item"><i class="fa-solid fa-file-pen"></i> Examinations</a>
+    <div class="nav-group-title">Campus</div>
+    <a th:href="@{/events}" class="nav-item active"><i class="fa-solid fa-calendar-star"></i> Events</a>
+    <a th:href="@{/library}" class="nav-item"><i class="fa-solid fa-book"></i> Library</a>
+    <a th:href="@{/fees}" class="nav-item"><i class="fa-solid fa-receipt"></i> Fee Portal</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-user">
+      <div class="sidebar-avatar" th:text="${#authentication.name.substring(0,1).toUpperCase()}">S</div>
+      <div class="sidebar-user-info">
+        <div class="sidebar-user-name" th:text="${#authentication.name}">Student</div>
+        <div class="sidebar-user-role">Student</div>
+      </div>
+    </div>
+  </div>
+</aside>
+<div id="sidebarOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:199;" onclick="closeSidebar()"></div>
+
+<div class="main">
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="sidebar-toggle" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
+      <div>
+        <div class="topbar-title">Events</div>
+        <div class="topbar-sub">Campus Events &amp; Activities</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <button class="topbar-icon-btn" id="darkToggleBtn"><i class="fa-solid fa-circle-half-stroke"></i></button>
+      <div class="topbar-avatar" th:text="${#authentication.name.substring(0,1).toUpperCase()}">S</div>
+      <div style="position:relative;">
+        <button class="topbar-icon-btn" id="accountMenuBtn"><i class="fa-solid fa-chevron-down"></i></button>
+        <div id="accountDropdown" style="display:none;position:absolute;right:0;top:calc(100% + 8px);background:#fff;border:1px solid rgba(79,70,229,.12);border-radius:14px;padding:8px;min-width:200px;box-shadow:0 20px 60px rgba(0,0,0,.12);z-index:300;">
+          <form th:action="@{/logout}" method="POST" id="logoutForm" style="display:none;"></form>
+          <a href="javascript:void(0)" onclick="document.getElementById('logoutForm').submit()" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;color:#ef4444;font-size:14px;font-weight:500;text-decoration:none;" onmouseover="this.style.background='#fef2f2'" onmouseout="this.style.background='none'">
+            <i class="fa-solid fa-arrow-right-from-bracket" style="width:18px;"></i> Logout
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-body">
+    <div class="stats-row" style="margin-bottom:28px;">
+      <div class="stat-card"><div class="stat-icon indigo"><i class="fa-solid fa-calendar-star"></i></div><div><div class="stat-value">3</div><div class="stat-label">Upcoming Events</div></div></div>
+      <div class="stat-card"><div class="stat-icon green"><i class="fa-solid fa-circle-check"></i></div><div><div class="stat-value">2</div><div class="stat-label">Registered</div></div></div>
+      <div class="stat-card"><div class="stat-icon amber"><i class="fa-solid fa-trophy"></i></div><div><div class="stat-value">5</div><div class="stat-label">Past Events</div></div></div>
+      <div class="stat-card"><div class="stat-icon cyan"><i class="fa-solid fa-medal"></i></div><div><div class="stat-value">2</div><div class="stat-label">Prizes Won</div></div></div>
+    </div>
+
+    <div class="section-label">Upcoming Events</div>
+    <div class="events-grid" style="margin-bottom:32px;">
+
+      <div class="event-card">
+        <div class="event-banner" style="background:linear-gradient(90deg,#4F46E5,#06B6D4);"></div>
+        <div class="event-body">
+          <span class="event-tag tag-tech"><i class="fa-solid fa-laptop-code"></i> Tech</span>
+          <div class="event-title">Tech Fest 2026 — TechXplore</div>
+          <div class="event-meta">
+            <span><i class="fa-solid fa-calendar"></i> May 8–10, 2026</span>
+            <span><i class="fa-solid fa-location-dot"></i> Main Auditorium</span>
+            <span><i class="fa-solid fa-users"></i> 500+ participants expected</span>
+          </div>
+          <button class="event-btn registered"><i class="fa-solid fa-check"></i> Registered ✓</button>
+        </div>
+      </div>
+
+      <div class="event-card">
+        <div class="event-banner" style="background:linear-gradient(90deg,#f59e0b,#f43f5e);"></div>
+        <div class="event-body">
+          <span class="event-tag tag-career"><i class="fa-solid fa-briefcase"></i> Placement</span>
+          <div class="event-title">Placement Drive — TCS &amp; Infosys</div>
+          <div class="event-meta">
+            <span><i class="fa-solid fa-calendar"></i> May 24, 2026</span>
+            <span><i class="fa-solid fa-location-dot"></i> Placement Cell, Block C</span>
+            <span><i class="fa-solid fa-users"></i> Final &amp; Pre-Final Year</span>
+          </div>
+          <button class="event-btn registered"><i class="fa-solid fa-check"></i> Registered ✓</button>
+        </div>
+      </div>
+
+      <div class="event-card">
+        <div class="event-banner" style="background:linear-gradient(90deg,#f59e0b,#10b981);"></div>
+        <div class="event-body">
+          <span class="event-tag tag-cultural"><i class="fa-solid fa-music"></i> Cultural</span>
+          <div class="event-title">Cultural Fest Utsav 2026</div>
+          <div class="event-meta">
+            <span><i class="fa-solid fa-calendar"></i> June 6–8, 2026</span>
+            <span><i class="fa-solid fa-location-dot"></i> Open Air Theatre</span>
+            <span><i class="fa-solid fa-users"></i> All Students Welcome</span>
+          </div>
+          <button class="event-btn" onclick="this.className='event-btn registered';this.innerHTML='<i class=\'fa-solid fa-check\'></i> Registered ✓'">Register Now</button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section-label">Past Events</div>
+    <div class="events-grid">
+      <div class="event-card" style="opacity:.75;">
+        <div class="event-banner" style="background:linear-gradient(90deg,#10b981,#4F46E5);"></div>
+        <div class="event-body">
+          <span class="event-tag tag-sport"><i class="fa-solid fa-trophy"></i> Sports</span>
+          <div class="event-title">Annual Sports Day 2026</div>
+          <div class="event-meta"><span><i class="fa-solid fa-calendar"></i> March 14, 2026</span><span><i class="fa-solid fa-trophy"></i> Won 2nd place in Chess</span></div>
+          <button class="event-btn" style="opacity:.5;cursor:default;">Completed</button>
+        </div>
+      </div>
+      <div class="event-card" style="opacity:.75;">
+        <div class="event-banner" style="background:linear-gradient(90deg,#8b5cf6,#4F46E5);"></div>
+        <div class="event-body">
+          <span class="event-tag tag-tech"><i class="fa-solid fa-laptop-code"></i> Tech</span>
+          <div class="event-title">Code Sprint — Hackathon 3.0</div>
+          <div class="event-meta"><span><i class="fa-solid fa-calendar"></i> February 20–21, 2026</span><span><i class="fa-solid fa-trophy"></i> Finalist (Top 10)</span></div>
+          <button class="event-btn" style="opacity:.5;cursor:default;">Completed</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  const sidebarEl=document.getElementById('sidebar'),overlayEl=document.getElementById('sidebarOverlay');
+  document.getElementById('sidebarToggle').addEventListener('click',()=>{sidebarEl.classList.toggle('open');overlayEl.style.display=sidebarEl.classList.contains('open')?'block':'none';});
+  function closeSidebar(){sidebarEl.classList.remove('open');overlayEl.style.display='none';}
+  const accountBtn=document.getElementById('accountMenuBtn'),accountDropdown=document.getElementById('accountDropdown');
+  accountBtn.addEventListener('click',e=>{e.stopPropagation();accountDropdown.style.display=accountDropdown.style.display==='none'?'block':'none';});
+  document.addEventListener('click',()=>{accountDropdown.style.display='none';});
+  const darkBtn=document.getElementById('darkToggleBtn');
+  function applyDark(on){document.body.classList.toggle('dark-mode-dash',on);darkBtn.querySelector('i').className=on?'fa-solid fa-sun':'fa-solid fa-circle-half-stroke';}
+  darkBtn.addEventListener('click',()=>{const on=!document.body.classList.contains('dark-mode-dash');applyDark(on);localStorage.setItem('darkMode',on);});
+  if(localStorage.getItem('darkMode')==='true')applyDark(true);
+</script>
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attendance — RGMCET Student Portal</title>
+  <link rel="icon" th:href="@{/images/clglogo.png}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" th:href="@{/css/dashbord.css}">
+  <style>
+    .att-table { width:100%; border-collapse:collapse; }
+    .att-table th { background:linear-gradient(135deg,#4F46E5,#06B6D4); color:#fff; font-size:12px; font-weight:700; padding:14px 16px; text-align:left; }
+    .att-table th:first-child { border-radius:12px 0 0 0; }
+    .att-table th:last-child  { border-radius:0 12px 0 0; }
+    .att-table td { padding:16px; border-bottom:1px solid var(--border); font-size:14px; color:var(--text-primary); vertical-align:middle; }
+    .att-table tr:last-child td { border-bottom:none; }
+    .att-table tr:hover td { background:rgba(79,70,229,.03); }
+    .progress-bar { height:8px; border-radius:999px; background:#e2e8f0; overflow:hidden; min-width:120px; }
+    .progress-fill { height:100%; border-radius:999px; transition:width .8s ease; }
+    .badge-good  { background:rgba(16,185,129,.12); color:#10b981; padding:4px 12px; border-radius:999px; font-size:12px; font-weight:700; }
+    .badge-warn  { background:rgba(245,158,11,.12); color:#f59e0b; padding:4px 12px; border-radius:999px; font-size:12px; font-weight:700; }
+    .badge-danger{ background:rgba(239,68,68,.12); color:#ef4444; padding:4px 12px; border-radius:999px; font-size:12px; font-weight:700; }
+    .summary-ring { position:relative; width:120px; height:120px; }
+    .ring-text { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+    .ring-val { font-size:1.8rem; font-weight:800; color:var(--text-primary); }
+    .ring-lbl { font-size:11px; color:var(--text-secondary); font-weight:500; }
+  </style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <i class="fa-solid fa-graduation-cap" style="font-size:24px;color:#67e8f9;"></i>
+    <div class="sidebar-logo">RGM<span>CET</span></div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-group-title">Main</div>
+    <a th:href="@{/dashboard}" class="nav-item" id="nav-dashboard"><i class="fa-solid fa-house"></i> Dashboard</a>
+    <a th:href="@{/departments}" class="nav-item" id="nav-departments"><i class="fa-solid fa-building-columns"></i> Departments</a>
+    <a th:href="@{/services}" class="nav-item" id="nav-services"><i class="fa-solid fa-grid-2"></i> Services</a>
+    <div class="nav-group-title">Academics</div>
+    <a th:href="@{/timetable}" class="nav-item" id="nav-schedule"><i class="fa-solid fa-calendar-days"></i> Timetable</a>
+    <a th:href="@{/attendance}" class="nav-item active" id="nav-attendance"><i class="fa-solid fa-clipboard-check"></i> Attendance<span class="nav-badge">New</span></a>
+    <a th:href="@{/results}" class="nav-item" id="nav-results"><i class="fa-solid fa-chart-bar"></i> Results</a>
+    <a th:href="@{/examinations}" class="nav-item" id="nav-exams"><i class="fa-solid fa-file-pen"></i> Examinations</a>
+    <div class="nav-group-title">Campus</div>
+    <a th:href="@{/events}" class="nav-item" id="nav-events"><i class="fa-solid fa-calendar-star"></i> Events</a>
+    <a th:href="@{/library}" class="nav-item" id="nav-library"><i class="fa-solid fa-book"></i> Library</a>
+    <a th:href="@{/fees}" class="nav-item" id="nav-fees"><i class="fa-solid fa-receipt"></i> Fee Portal</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-user">
+      <div class="sidebar-avatar" th:text="${#authentication.name.substring(0,1).toUpperCase()}">S</div>
+      <div class="sidebar-user-info">
+        <div class="sidebar-user-name" th:text="${#authentication.name}">Student</div>
+        <div class="sidebar-user-role">Student</div>
+      </div>
+      <i class="fa-solid fa-ellipsis-vertical" style="color:rgba(255,255,255,.4);font-size:14px;"></i>
+    </div>
+  </div>
+</aside>
+<div id="sidebarOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:199;" onclick="closeSidebar()"></div>
+
+<div class="main">
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="sidebar-toggle" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
+      <div>
+        <div class="topbar-title">Attendance</div>
+        <div class="topbar-sub">Semester IV — Academic Year 2025–26</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <button class="topbar-icon-btn" id="darkToggleBtn"><i class="fa-solid fa-circle-half-stroke"></i></button>
+      <div class="topbar-avatar" th:text="${#authentication.name.substring(0,1).toUpperCase()}">S</div>
+      <div style="position:relative;">
+        <button class="topbar-icon-btn" id="accountMenuBtn"><i class="fa-solid fa-chevron-down"></i></button>
+        <div id="accountDropdown" style="display:none;position:absolute;right:0;top:calc(100% + 8px);background:#fff;border:1px solid rgba(79,70,229,.12);border-radius:14px;padding:8px;min-width:200px;box-shadow:0 20px 60px rgba(0,0,0,.12);z-index:300;">
+          <form th:action="@{/logout}" method="POST" id="logoutForm" style="display:none;"></form>
+          <a href="javascript:void(0)" onclick="document.getElementById('logoutForm').submit()" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;color:#ef4444;font-size:14px;font-weight:500;text-decoration:none;" onmouseover="this.style.background='#fef2f2'" onmouseout="this.style.background='none'">
+            <i class="fa-solid fa-arrow-right-from-bracket" style="width:18px;"></i> Logout
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-body">
+    <!-- Summary cards -->
+    <div class="stats-row" style="margin-bottom:28px;">
+      <div class="stat-card">
+        <div class="stat-icon indigo"><i class="fa-solid fa-percent"></i></div>
+        <div><div class="stat-value">87%</div><div class="stat-label">Overall Attendance</div><div class="stat-delta up"><i class="fa-solid fa-arrow-up"></i> Above 75% required</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon cyan"><i class="fa-solid fa-calendar-check"></i></div>
+        <div><div class="stat-value">94</div><div class="stat-label">Classes Attended</div><div class="stat-delta up"><i class="fa-solid fa-check"></i> Out of 108 total</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon amber"><i class="fa-solid fa-calendar-xmark"></i></div>
+        <div><div class="stat-value">14</div><div class="stat-label">Classes Missed</div><div class="stat-delta" style="color:#f59e0b;"><i class="fa-solid fa-triangle-exclamation"></i> Keep it minimal</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon green"><i class="fa-solid fa-shield-check"></i></div>
+        <div><div class="stat-value">Safe</div><div class="stat-label">Shortage Risk</div><div class="stat-delta up"><i class="fa-solid fa-check"></i> No subjects at risk</div></div>
+      </div>
+    </div>
+
+    <!-- Subject-wise table -->
+    <div class="dash-card">
+      <div class="dash-card-title"><i class="fa-solid fa-clipboard-check" style="color:#4F46E5;margin-right:8px;"></i>Subject-wise Attendance</div>
+      <div style="overflow-x:auto;">
+        <table class="att-table">
+          <thead>
+            <tr>
+              <th>Subject</th>
+              <th>Faculty</th>
+              <th>Attended</th>
+              <th>Total</th>
+              <th>Percentage</th>
+              <th>Progress</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Data Structures</strong><br><span style="font-size:11px;color:var(--text-secondary);">CS401</span></td>
+              <td>Dr. R. Sharma</td>
+              <td>18</td><td>20</td>
+              <td><strong>90%</strong></td>
+              <td><div class="progress-bar"><div class="progress-fill" style="width:90%;background:linear-gradient(90deg,#4F46E5,#06B6D4);"></div></div></td>
+              <td><span class="badge-good">Good</span></td>
+            </tr>
+            <tr>
+              <td><strong>Operating Systems</strong><br><span style="font-size:11px;color:var(--text-secondary);">CS402</span></td>
+              <td>Prof. K. Rao</td>
+              <td>16</td><td>19</td>
+              <td><strong>84%</strong></td>
+              <td><div class="progress-bar"><div class="progress-fill" style="width:84%;background:linear-gradient(90deg,#10b981,#06B6D4);"></div></div></td>
+              <td><span class="badge-good">Good</span></td>
+            </tr>
+            <tr>
+              <td><strong>Mathematics III</strong><br><span style="font-size:11px;color:var(--text-secondary);">MA401</span></td>
+              <td>Dr. S. Reddy</td>
+              <td>17</td><td>19</td>
+              <td><strong>89%</strong></td>
+              <td><div class="progress-bar"><div class="progress-fill" style="width:89%;background:linear-gradient(90deg,#10b981,#4F46E5);"></div></div></td>
+              <td><span class="badge-good">Good</span></td>
+            </tr>
+            <tr>
+              <td><strong>Database Management Systems</strong><br><span style="font-size:11px;color:var(--text-secondary);">CS403</span></td>
+              <td>Dr. P. Kumar</td>
+              <td>14</td><td>18</td>
+              <td><strong>78%</strong></td>
+              <td><div class="progress-bar"><div class="progress-fill" style="width:78%;background:linear-gradient(90deg,#f59e0b,#f43f5e);"></div></div></td>
+              <td><span class="badge-warn">Average</span></td>
+            </tr>
+            <tr>
+              <td><strong>Computer Networks</strong><br><span style="font-size:11px;color:var(--text-secondary);">CS404</span></td>
+              <td>Prof. A. Singh</td>
+              <td>15</td><td>17</td>
+              <td><strong>88%</strong></td>
+              <td><div class="progress-bar"><div class="progress-fill" style="width:88%;background:linear-gradient(90deg,#4F46E5,#06B6D4);"></div></div></td>
+              <td><span class="badge-good">Good</span></td>
+            </tr>
+            <tr>
+              <td><strong>Software Engineering</strong><br><span style="font-size:11px;color:var(--text-secondary);">CS405</span></td>
+              <td>Dr. M. Patel</td>
+              <td>14</td><td>15</td>
+              <td><strong>93%</strong></td>
+              <td><div class="progress-bar"><div class="progress-fill" style="width:93%;background:linear-gradient(90deg,#10b981,#4F46E5);"></div></div></td>
+              <td><span class="badge-good">Excellent</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:16px;padding:12px 16px;background:rgba(79,70,229,.05);border-radius:10px;font-size:13px;color:var(--text-secondary);">
+        <i class="fa-solid fa-circle-info" style="color:#4F46E5;margin-right:6px;"></i>
+        Minimum required attendance is <strong>75%</strong>. Students below 75% will not be permitted to appear for semester end examinations.
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  const sidebarEl=document.getElementById('sidebar'),overlayEl=document.getElementById('sidebarOverlay');
+  document.getElementById('sidebarToggle').addEventListener('click',()=>{sidebarEl.classList.toggle('open');overlayEl.style.display=sidebarEl.classList.contains('open')?'block':'none';});
+  function closeSidebar(){sidebarEl.classList.remove('open');overlayEl.style.display='none';}
+  const accountBtn=document.getElementById('accountMenuBtn'),accountDropdown=document.getElementById('accountDropdown');
+  accountBtn.addEventListener('click',e=>{e.stopPropagation();accountDropdown.style.display=accountDropdown.style.display==='none'?'block':'none';});
+  document.addEventListener('click',()=>{accountDropdown.style.display='none';});
+  const darkBtn=document.getElementById('darkToggleBtn');
+  function applyDark(on){document.body.classList.toggle('dark-mode-dash',on);darkBtn.querySelector('i').className=on?'fa-solid fa-sun':'fa-solid fa-circle-half-stroke';}
+  darkBtn.addEventListener('click',()=>{const on=!document.body.classList.contains('dark-mode-dash');applyDark(on);localStorage.setItem('darkMode',on);});
+  if(localStorage.getItem('darkMode')==='true')applyDark(true);
+</script>
+</body>
+</html>

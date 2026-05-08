@@ -27,9 +27,13 @@ public class User {
     
     private String facultyId; // For faculty
 
+    private String department; // e.g., "CSE", "ECE"
+    private String section;    // e.g., "A", "B"
+    private Integer semester;  // e.g., 1-8
+
     public User() {}
 
-    public User(Long id, String name, String email, String password, Role role, String registrationNumber, String facultyId) {
+    public User(Long id, String name, String email, String password, Role role, String registrationNumber, String facultyId, String department, String section, Integer semester) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -37,6 +41,9 @@ public class User {
         this.role = role;
         this.registrationNumber = registrationNumber;
         this.facultyId = facultyId;
+        this.department = department;
+        this.section = section;
+        this.semester = semester;
     }
 
     public static UserBuilder builder() {
@@ -57,6 +64,12 @@ public class User {
     public void setRegistrationNumber(String registrationNumber) { this.registrationNumber = registrationNumber; }
     public String getFacultyId() { return facultyId; }
     public void setFacultyId(String facultyId) { this.facultyId = facultyId; }
+    public String getDepartment() { return department; }
+    public void setDepartment(String department) { this.department = department; }
+    public String getSection() { return section; }
+    public void setSection(String section) { this.section = section; }
+    public Integer getSemester() { return semester; }
+    public void setSemester(Integer semester) { this.semester = semester; }
 
     public static class UserBuilder {
         private Long id;
@@ -66,6 +79,9 @@ public class User {
         private Role role;
         private String registrationNumber;
         private String facultyId;
+        private String department;
+        private String section;
+        private Integer semester;
 
         public UserBuilder id(Long id) { this.id = id; return this; }
         public UserBuilder name(String name) { this.name = name; return this; }
@@ -74,9 +90,12 @@ public class User {
         public UserBuilder role(Role role) { this.role = role; return this; }
         public UserBuilder registrationNumber(String registrationNumber) { this.registrationNumber = registrationNumber; return this; }
         public UserBuilder facultyId(String facultyId) { this.facultyId = facultyId; return this; }
+        public UserBuilder department(String department) { this.department = department; return this; }
+        public UserBuilder section(String section) { this.section = section; return this; }
+        public UserBuilder semester(Integer semester) { this.semester = semester; return this; }
 
         public User build() {
-            return new User(id, name, email, password, role, registrationNumber, facultyId);
+            return new User(id, name, email, password, role, registrationNumber, facultyId, department, section, semester);
         }
     }
 }

@@ -59,4 +59,44 @@ public class WebController {
     public String departments() {
         return "department";
     }
+
+    @GetMapping("/timetable")
+    public String timetable() {
+        return "timetable";
+    }
+
+    @GetMapping("/attendance")
+    public String attendance() {
+        return "attendance";
+    }
+
+    @GetMapping("/results")
+    public String results() {
+        return "results";
+    }
+
+    @GetMapping("/examinations")
+    public String examinations() {
+        return "examinations";
+    }
+
+    @GetMapping("/events")
+    public String events() {
+        return "events";
+    }
+
+    @GetMapping("/library")
+    public String library() {
+        return "library";
+    }
+
+    @GetMapping("/fees")
+    public String fees() {
+        return "fees";
+    }
+
+    @GetMapping("/services")
+    public String services() {
+        return "services";
+    }
 }

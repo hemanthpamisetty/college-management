@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Results — RGMCET Student Portal</title>
+  <link rel="icon" th:href="@{/images/clglogo.png}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" th:href="@{/css/dashbord.css}">
+  <style>
+    .sem-tabs { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:24px; }
+    .sem-tab { padding:10px 22px; border-radius:999px; border:1px solid var(--border); background:var(--bg-card); font-size:14px; font-weight:600; color:var(--text-secondary); cursor:pointer; transition:all .3s; }
+    .sem-tab.active { background:var(--gradient); color:#fff; border-color:transparent; }
+    .sem-tab:hover:not(.active) { border-color:var(--primary); color:var(--primary); }
+    .res-table { width:100%; border-collapse:collapse; }
+    .res-table th { background:linear-gradient(135deg,#4F46E5,#06B6D4); color:#fff; font-size:12px; font-weight:700; padding:14px 16px; text-align:left; }
+    .res-table td { padding:15px 16px; border-bottom:1px solid var(--border); font-size:14px; }
+    .res-table tr:hover td { background:rgba(79,70,229,.03); }
+    .grade { display:inline-block; width:36px; height:36px; border-radius:10px; font-weight:800; font-size:16px; display:flex; align-items:center; justify-content:center; }
+    .grade-o  { background:rgba(79,70,229,.12); color:#4F46E5; }
+    .grade-A  { background:rgba(16,185,129,.12); color:#10b981; }
+    .grade-B  { background:rgba(6,182,212,.12); color:#06B6D4; }
+    .grade-C  { background:rgba(245,158,11,.12); color:#f59e0b; }
+    .cgpa-circle { width:140px; height:140px; border-radius:50%; background:var(--gradient); display:flex; flex-direction:column; align-items:center; justify-content:center; color:#fff; box-shadow:0 12px 40px rgba(79,70,229,.4); }
+    .cgpa-val   { font-size:2.2rem; font-weight:900; line-height:1; }
+    .cgpa-label { font-size:11px; opacity:.8; font-weight:600; margin-top:4px; }
+  </style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <i class="fa-solid fa-graduation-cap" style="font-size:24px;color:#67e8f9;"></i>
+    <div class="sidebar-logo">RGM<span>CET</span></div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-group-title">Main</div>
+    <a th:href="@{/dashboard}" class="nav-item"><i class="fa-solid fa-house"></i> Dashboard</a>
+    <a th:href="@{/departments}" class="nav-item"><i class="fa-solid fa-building-columns"></i> Departments</a>
+    <a th:href="@{/services}" class="nav-item"><i class="fa-solid fa-grid-2"></i> Services</a>
+    <div class="nav-group-title">Academics</div>
+    <a th:href="@{/timetable}" class="nav-item"><i class="fa-solid fa-calendar-days"></i> Timetable</a>
+    <a th:href="@{/attendance}" class="nav-item"><i class="fa-solid fa-clipboard-check"></i> Attendance</a>
+    <a th:href="@{/results}" class="nav-item active"><i class="fa-solid fa-chart-bar"></i> Results</a>
+    <a th:href="@{/examinations}" class="nav-item"><i class="fa-solid fa-file-pen"></i> Examinations</a>
+    <div class="nav-group-title">Campus</div>
+    <a th:href="@{/events}" class="nav-item"><i class="fa-solid fa-calendar-star"></i> Events</a>
+    <a th:href="@{/library}" class="nav-item"><i class="fa-solid fa-book"></i> Library</a>
+    <a th:href="@{/fees}" class="nav-item"><i class="fa-solid fa-receipt"></i> Fee Portal</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-user">
+      <div class="sidebar-avatar" th:text="${#authentication.name.substring(0,1).toUpperCase()}">S</div>
+      <div class="sidebar-user-info">
+        <div class="sidebar-user-name" th:text="${#authentication.name}">Student</div>
+        <div class="sidebar-user-role">Student</div>
+      </div>
+    </div>
+  </div>
+</aside>
+<div id="sidebarOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:199;" onclick="closeSidebar()"></div>
+
+<div class="main">
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="sidebar-toggle" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
+      <div>
+        <div class="topbar-title">Results</div>
+        <div class="topbar-sub">Academic Performance — B.Tech CSE</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <button class="topbar-icon-btn"><i class="fa-solid fa-download"></i></button>
+      <button class="topbar-icon-btn" id="darkToggleBtn"><i class="fa-solid fa-circle-half-stroke"></i></button>
+      <div class="topbar-avatar" th:text="${#authentication.name.substring(0,1).toUpperCase()}">S</div>
+      <div style="position:relative;">
+        <button class="topbar-icon-btn" id="accountMenuBtn"><i class="fa-solid fa-chevron-down"></i></button>
+        <div id="accountDropdown" style="display:none;position:absolute;right:0;top:calc(100% + 8px);background:#fff;border:1px solid rgba(79,70,229,.12);border-radius:14px;padding:8px;min-width:200px;box-shadow:0 20px 60px rgba(0,0,0,.12);z-index:300;">
+          <form th:action="@{/logout}" method="POST" id="logoutForm" style="display:none;"></form>
+          <a href="javascript:void(0)" onclick="document.getElementById('logoutForm').submit()" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;color:#ef4444;font-size:14px;font-weight:500;text-decoration:none;" onmouseover="this.style.background='#fef2f2'" onmouseout="this.style.background='none'">
+            <i class="fa-solid fa-arrow-right-from-bracket" style="width:18px;"></i> Logout
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-body">
+    <!-- CGPA Summary -->
+    <div class="dash-card" style="display:flex;align-items:center;gap:40px;flex-wrap:wrap;margin-bottom:28px;">
+      <div class="cgpa-circle">
+        <div class="cgpa-val">8.4</div>
+        <div class="cgpa-label">CGPA</div>
+      </div>
+      <div style="flex:1;min-width:220px;">
+        <div style="font-size:1.3rem;font-weight:800;color:var(--text-primary);margin-bottom:8px;">Overall Academic Performance</div>
+        <div style="font-size:14px;color:var(--text-secondary);margin-bottom:16px;">B.Tech Computer Science &amp; Engineering — Semesters I–III completed</div>
+        <div style="display:flex;gap:24px;flex-wrap:wrap;">
+          <div><div style="font-size:1.4rem;font-weight:800;color:#4F46E5;">8.4</div><div style="font-size:12px;color:var(--text-secondary);">Current CGPA</div></div>
+          <div><div style="font-size:1.4rem;font-weight:800;color:#10b981;">8.6</div><div style="font-size:12px;color:var(--text-secondary);">Best Semester SGPA</div></div>
+          <div><div style="font-size:1.4rem;font-weight:800;color:#06B6D4;">3rd</div><div style="font-size:12px;color:var(--text-secondary);">Class Rank</div></div>
+          <div><div style="font-size:1.4rem;font-weight:800;color:#f59e0b;">18</div><div style="font-size:12px;color:var(--text-secondary);">Credits Earned</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Semester tabs -->
+    <div class="sem-tabs">
+      <button class="sem-tab active" onclick="showSem(this,'sem3')">Semester III</button>
+      <button class="sem-tab" onclick="showSem(this,'sem2')">Semester II</button>
+      <button class="sem-tab" onclick="showSem(this,'sem1')">Semester I</button>
+    </div>
+
+    <!-- Sem 3 Results -->
+    <div id="sem3" class="sem-content dash-card" style="margin-bottom:24px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+        <div class="dash-card-title" style="margin-bottom:0;"><i class="fa-solid fa-chart-bar" style="color:#4F46E5;margin-right:8px;"></i>Semester III Results</div>
+        <div style="background:rgba(16,185,129,.1);color:#10b981;padding:6px 16px;border-radius:999px;font-size:13px;font-weight:700;">SGPA: 8.6</div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="res-table">
+          <thead><tr><th>Subject</th><th>Code</th><th>Credits</th><th>Internal</th><th>External</th><th>Total</th><th>Grade</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Data Structures &amp; Algorithms</strong></td><td>CS301</td><td>4</td><td>28</td><td>62</td><td>90</td><td><div class="grade grade-o">O</div></td></tr>
+            <tr><td><strong>Digital Electronics</strong></td><td>CS302</td><td>3</td><td>25</td><td>57</td><td>82</td><td><div class="grade grade-A">A</div></td></tr>
+            <tr><td><strong>Mathematics II</strong></td><td>MA301</td><td>4</td><td>27</td><td>60</td><td>87</td><td><div class="grade grade-A">A+</div></td></tr>
+            <tr><td><strong>Computer Organization</strong></td><td>CS303</td><td>3</td><td>26</td><td>55</td><td>81</td><td><div class="grade grade-A">A</div></td></tr>
+            <tr><td><strong>Object Oriented Programming</strong></td><td>CS304</td><td>4</td><td>29</td><td>63</td><td>92</td><td><div class="grade grade-o">O</div></td></tr>
+            <tr><td><strong>OOP Lab</strong></td><td>CS305</td><td>2</td><td>–</td><td>85</td><td>85</td><td><div class="grade grade-A">A+</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Sem 2 Results (hidden by default) -->
+    <div id="sem2" class="sem-content dash-card" style="margin-bottom:24px;display:none;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+        <div class="dash-card-title" style="margin-bottom:0;"><i class="fa-solid fa-chart-bar" style="color:#06B6D4;margin-right:8px;"></i>Semester II Results</div>
+        <div style="background:rgba(6,182,212,.1);color:#06B6D4;padding:6px 16px;border-radius:999px;font-size:13px;font-weight:700;">SGPA: 8.3</div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="res-table">
+          <thead><tr><th>Subject</th><th>Code</th><th>Credits</th><th>Internal</th><th>External</th><th>Total</th><th>Grade</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Programming in C</strong></td><td>CS201</td><td>4</td><td>26</td><td>58</td><td>84</td><td><div class="grade grade-A">A+</div></td></tr>
+            <tr><td><strong>Engineering Mathematics I</strong></td><td>MA201</td><td>4</td><td>24</td><td>54</td><td>78</td><td><div class="grade grade-B">B+</div></td></tr>
+            <tr><td><strong>Physics</strong></td><td>PH201</td><td>3</td><td>22</td><td>55</td><td>77</td><td><div class="grade grade-B">B+</div></td></tr>
+            <tr><td><strong>English &amp; Communication</strong></td><td>EN201</td><td>2</td><td>28</td><td>62</td><td>90</td><td><div class="grade grade-o">O</div></td></tr>
+            <tr><td><strong>Engineering Graphics</strong></td><td>ME201</td><td>2</td><td>25</td><td>57</td><td>82</td><td><div class="grade grade-A">A</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Sem 1 Results (hidden by default) -->
+    <div id="sem1" class="sem-content dash-card" style="margin-bottom:24px;display:none;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+        <div class="dash-card-title" style="margin-bottom:0;"><i class="fa-solid fa-chart-bar" style="color:#10b981;margin-right:8px;"></i>Semester I Results</div>
+        <div style="background:rgba(16,185,129,.1);color:#10b981;padding:6px 16px;border-radius:999px;font-size:13px;font-weight:700;">SGPA: 8.2</div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="res-table">
+          <thead><tr><th>Subject</th><th>Code</th><th>Credits</th><th>Internal</th><th>External</th><th>Total</th><th>Grade</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Problem Solving &amp; Computing</strong></td><td>CS101</td><td>4</td><td>25</td><td>57</td><td>82</td><td><div class="grade grade-A">A</div></td></tr>
+            <tr><td><strong>Engineering Chemistry</strong></td><td>CH101</td><td>3</td><td>23</td><td>53</td><td>76</td><td><div class="grade grade-B">B+</div></td></tr>
+            <tr><td><strong>Engineering Mathematics I</strong></td><td>MA101</td><td>4</td><td>26</td><td>60</td><td>86</td><td><div class="grade grade-A">A+</div></td></tr>
+            <tr><td><strong>Engineering Physics</strong></td><td>PH101</td><td>3</td><td>22</td><td>52</td><td>74</td><td><div class="grade grade-B">B</div></td></tr>
+            <tr><td><strong>Workshop Practice</strong></td><td>ME101</td><td>2</td><td>–</td><td>80</td><td>80</td><td><div class="grade grade-A">A</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  function showSem(btn, id) {
+    document.querySelectorAll('.sem-tab').forEach(t=>t.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.sem-content').forEach(s=>s.style.display='none');
+    document.getElementById(id).style.display='block';
+  }
+  const sidebarEl=document.getElementById('sidebar'),overlayEl=document.getElementById('sidebarOverlay');
+  document.getElementById('sidebarToggle').addEventListener('click',()=>{sidebarEl.classList.toggle('open');overlayEl.style.display=sidebarEl.classList.contains('open')?'block':'none';});
+  function closeSidebar(){sidebarEl.classList.remove('open');overlayEl.style.display='none';}
+  const accountBtn=document.getElementById('accountMenuBtn'),accountDropdown=document.getElementById('accountDropdown');
+  accountBtn.addEventListener('click',e=>{e.stopPropagation();accountDropdown.style.display=accountDropdown.style.display==='none'?'block':'none';});
+  document.addEventListener('click',()=>{accountDropdown.style.display='none';});
+  const darkBtn=document.getElementById('darkToggleBtn');
+  function applyDark(on){document.body.classList.toggle('dark-mode-dash',on);darkBtn.querySelector('i').className=on?'fa-solid fa-sun':'fa-solid fa-circle-half-stroke';}
+  darkBtn.addEventListener('click',()=>{const on=!document.body.classList.contains('dark-mode-dash');applyDark(on);localStorage.setItem('darkMode',on);});
+  if(localStorage.getItem('darkMode')==='true')applyDark(true);
+</script>
+</body>
+</html>

@@ -73,6 +73,54 @@
         </div>
       </div>
 
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+        <div class="form-field">
+          <label><i class="fa-solid fa-building-columns" style="margin-right:6px;color:#4F46E5;"></i>Department</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-graduation-cap"></i>
+            <select class="form-input" th:field="*{department}" required style="appearance:none;cursor:pointer;">
+              <option value="" disabled selected>Select</option>
+              <option value="CSE">CSE</option>
+              <option value="ECE">ECE</option>
+              <option value="EEE">EEE</option>
+              <option value="MECH">MECH</option>
+              <option value="CIVIL">CIVIL</option>
+              <option value="IT">IT</option>
+              <option value="AIDS">AI&DS</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-field">
+          <label><i class="fa-solid fa-users" style="margin-right:6px;color:#06B6D4;"></i>Section</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-layer-group"></i>
+            <select class="form-input" th:field="*{section}" required style="appearance:none;cursor:pointer;">
+              <option value="" disabled selected>Select</option>
+              <option value="A">A</option>
+              <option value="B">B</option>
+              <option value="C">C</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-field">
+          <label><i class="fa-solid fa-calendar" style="margin-right:6px;color:#10b981;"></i>Semester</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-list-ol"></i>
+            <select class="form-input" th:field="*{semester}" required style="appearance:none;cursor:pointer;">
+              <option value="" disabled selected>Select</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
       <div class="form-field">
         <label for="passwordInput"><i class="fa-solid fa-lock" style="margin-right:6px;color:#4F46E5;"></i>Set Password</label>
         <div class="input-wrapper" style="position:relative;">
