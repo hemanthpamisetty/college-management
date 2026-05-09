@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel — RGMCET</title>
+  <link rel="icon" th:href="@{/images/clglogo.png}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" th:href="@{/css/dashbord.css}">
+  <style>
+    .admin-tabs { display: flex; gap: 10px; margin-bottom: 24px; border-bottom: 1px solid var(--border); padding-bottom: 10px; overflow-x: auto; }
+    .admin-tab { padding: 10px 16px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; color: var(--text-secondary); border: none; background: transparent; transition: all 0.2s; white-space: nowrap; }
+    .admin-tab:hover { background: rgba(79,70,229,.05); color: #4F46E5; }
+    .admin-tab.active { background: linear-gradient(135deg,#4F46E5,#06B6D4); color: #fff; }
+    .admin-tab-content { display: none; }
+    .admin-tab-content.active { display: block; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .action-btn { padding: 6px 12px; border-radius: 6px; border: none; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px; }
+    .btn-edit { background: rgba(59,130,246,.1); color: #3b82f6; }
+    .btn-edit:hover { background: #3b82f6; color: #fff; }
+    .btn-delete { background: rgba(239,68,68,.1); color: #ef4444; }
+    .btn-delete:hover { background: #ef4444; color: #fff; }
+    .btn-add { background: linear-gradient(135deg,#10b981,#059669); color: #fff; padding: 10px 20px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; }
+    .table-container { overflow-x: auto; background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border); }
+    table.admin-table { width: 100%; border-collapse: collapse; }
+    table.admin-table th { padding: 14px 16px; text-align: left; background: rgba(79,70,229,.05); font-size: 13px; font-weight: 700; color: var(--text-primary); border-bottom: 2px solid var(--border); }
+    table.admin-table td { padding: 14px 16px; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text-secondary); }
+    table.admin-table tr:hover td { background: rgba(79,70,229,.02); }
+    
+    /* Toast */
+    .toast-container { position:fixed; top:20px; right:20px; z-index:9999; display:flex; flex-direction:column; gap:8px; }
+    .toast { padding:12px 20px; border-radius:12px; font-size:13px; font-weight:500; color:#fff; display:flex;align-items:center;gap:8px; animation:slideIn .3s ease; box-shadow:0 8px 24px rgba(0,0,0,.2); }
+    .toast.success { background:linear-gradient(135deg,#10b981,#06B6D4); }
+    .toast.error { background:linear-gradient(135deg,#ef4444,#f59e0b); }
+    @keyframes slideIn { from{transform:translateX(40px);opacity:0} to{transform:translateX(0);opacity:1} }
+    
+    /* Modal */
+    .modal-overlay { display:none; position:fixed; inset:0; background:rgba(15,23,42,.6); backdrop-filter:blur(6px); z-index:500; align-items:center; justify-content:center; }
+    .modal-overlay.active { display:flex; animation:fadeIn .2s ease; }
+    .modal-card { background:var(--bg-card); border-radius:20px; padding:32px; width:90%; max-width:600px; box-shadow:0 25px 60px rgba(0,0,0,.2); position:relative; max-height:90vh; overflow-y:auto; }
+    .modal-title { font-size:20px; font-weight:700; color:var(--text-primary); margin-bottom:20px; display:flex;align-items:center;gap:10px; }
+    .modal-close { position:absolute; top:16px; right:16px; width:36px; height:36px; border-radius:10px; border:none; background:#f1f5f9; cursor:pointer; display:flex;align-items:center;justify-content:center; font-size:16px; color:#64748b; transition:all .2s; }
+    .modal-close:hover { background:#e2e8f0; color:#ef4444; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg-main); color: var(--text-primary); font-family: 'Inter', sans-serif; font-size: 14px; }
+    .form-group input:focus, .form-group select:focus { outline: none; border-color: #4F46E5; box-shadow: 0 0 0 3px rgba(79,70,229,.1); }
+    .modal-submit { width: 100%; padding: 14px; border-radius: 12px; border: none; background: linear-gradient(135deg,#4F46E5,#06B6D4); color: #fff; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+    .modal-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(79,70,229,.3); }
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <i class="fa-solid fa-graduation-cap" style="font-size:24px;color:#67e8f9;"></i>
+    <div class="sidebar-logo">RGM<span>CET</span></div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-group-title">Main</div>
+    <a th:href="@{/dashboard}" class="nav-item"><i class="fa-solid fa-house"></i> Dashboard</a>
+    <a th:href="@{/departments}" class="nav-item"><i class="fa-solid fa-building-columns"></i> Departments</a>
+    <a th:href="@{/services}" class="nav-item"><i class="fa-solid fa-grid-2"></i> Services</a>
+    
+    <div class="nav-group-title">Academics</div>
+    <a th:href="@{/timetable}" class="nav-item"><i class="fa-solid fa-calendar-days"></i> Timetable</a>
+    <a th:href="@{/attendance}" class="nav-item"><i class="fa-solid fa-clipboard-check"></i> Attendance</a>
+    <a th:href="@{/results}" class="nav-item"><i class="fa-solid fa-chart-bar"></i> Results</a>
+    <a th:href="@{/examinations}" class="nav-item"><i class="fa-solid fa-file-pen"></i> Examinations</a>
+    
+    <div class="nav-group-title">Campus</div>
+    <a th:href="@{/events}" class="nav-item"><i class="fa-solid fa-calendar-star"></i> Events</a>
+    <a th:href="@{/library}" class="nav-item"><i class="fa-solid fa-book"></i> Library</a>
+    <a th:href="@{/fees}" class="nav-item"><i class="fa-solid fa-receipt"></i> Fee Portal</a>
+    
+    <div th:if="${isAdmin}">
+      <div class="nav-group-title">Admin</div>
+      <a th:href="@{/admin/panel}" class="nav-item active"><i class="fa-solid fa-users-gear"></i> Admin Panel <span class="nav-badge" style="background:#ef4444;">System</span></a>
+      <a th:href="@{/admin/students}" class="nav-item"><i class="fa-solid fa-user-graduate"></i> Legacy Student Mgmt</a>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-user">
+      <div class="sidebar-avatar" th:text="${userName != null ? userName.substring(0,1).toUpperCase() : 'U'}">S</div>
+      <div class="sidebar-user-info">
+        <div class="sidebar-user-name" th:text="${userName}">User</div>
+        <div class="sidebar-user-role" th:text="${userRoleDisplay}">Admin</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<div id="sidebarOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:199;" onclick="closeSidebar()"></div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="sidebar-toggle" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
+      <div>
+        <div class="topbar-title">Admin Control Panel</div>
+        <div class="topbar-sub">Manage all college modules and records</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <button class="topbar-icon-btn" id="darkToggleBtn"><i class="fa-solid fa-circle-half-stroke"></i></button>
+      <div class="topbar-avatar" th:text="${userName != null ? userName.substring(0,1).toUpperCase() : 'U'}">S</div>
+      <div style="position:relative;">
+        <button class="topbar-icon-btn" id="accountMenuBtn"><i class="fa-solid fa-chevron-down"></i></button>
+        <div id="accountDropdown" style="display:none;position:absolute;right:0;top:calc(100% + 8px);background:#fff;border:1px solid rgba(79,70,229,.12);border-radius:14px;padding:8px;min-width:200px;box-shadow:0 20px 60px rgba(0,0,0,.12);z-index:300;">
+          <form th:action="@{/logout}" method="POST" id="logoutForm" style="display:none;"></form>
+          <a href="javascript:void(0)" onclick="document.getElementById('logoutForm').submit()" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;color:#ef4444;font-size:14px;font-weight:500;text-decoration:none;" onmouseover="this.style.background='#fef2f2'" onmouseout="this.style.background='none'">
+            <i class="fa-solid fa-arrow-right-from-bracket" style="width:18px;"></i> Logout
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-body">
+    
+    <!-- Admin Tabs -->
+    <div class="admin-tabs" id="adminTabs">
+      <button class="admin-tab active" data-target="tab-dashboard"><i class="fa-solid fa-chart-pie"></i> Dashboard Stats</button>
+      <button class="admin-tab" data-target="tab-students"><i class="fa-solid fa-users"></i> Manage Students</button>
+      <button class="admin-tab" data-target="tab-attendance"><i class="fa-solid fa-clipboard-user"></i> All Attendance</button>
+      <button class="admin-tab" data-target="tab-results"><i class="fa-solid fa-square-poll-vertical"></i> All Results</button>
+      <button class="admin-tab" data-target="tab-events"><i class="fa-solid fa-calendar-star"></i> Manage Events</button>
+      <button class="admin-tab" data-target="tab-library"><i class="fa-solid fa-book"></i> Library Catalog</button>
+      <button class="admin-tab" data-target="tab-fees"><i class="fa-solid fa-coins"></i> Fee Records</button>
+      <button class="admin-tab" data-target="tab-exams"><i class="fa-solid fa-file-signature"></i> Examinations</button>
+    </div>
+
+    <!-- TABS CONTENT CONTAINER -->
+    <div id="tab-dashboard" class="admin-tab-content active">
+        <div class="dash-card">
+            <h3 style="margin-top:0;margin-bottom:20px;color:var(--text-primary);"><i class="fa-solid fa-chart-line" style="color:#4F46E5;margin-right:8px;"></i> System Overview</h3>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:16px;" id="dashboardStatsGrid">
+                <!-- Stats injected by JS -->
+                Loading stats...
+            </div>
+        </div>
+    </div>
+
+    <div id="tab-students" class="admin-tab-content">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+            <h3 style="margin:0;color:var(--text-primary);">Student Management</h3>
+            <div style="display:flex;gap:12px;">
+                <input type="text" id="studentSearch" placeholder="Search students..." style="padding:8px 14px;border-radius:8px;border:1px solid var(--border);font-family:'Inter';">
+                <button class="btn-add" onclick="loadStudents()"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
+            </div>
+        </div>
+        <div class="table-container">
+            <table class="admin-table">
+                <thead><tr><th>Reg No</th><th>Name</th><th>Email</th><th>Dept</th><th>Sem</th><th>Actions</th></tr></thead>
+                <tbody id="studentsTbody"><tr><td colspan="6" style="text-align:center;">Loading...</td></tr></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="tab-attendance" class="admin-tab-content">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+            <h3 style="margin:0;color:var(--text-primary);">Attendance Records</h3>
+            <button class="btn-add" onclick="loadAttendance()"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
+        </div>
+        <div class="table-container">
+            <table class="admin-table">
+                <thead><tr><th>Student</th><th>Subject</th><th>Date</th><th>Status</th><th>Marked By</th><th>Actions</th></tr></thead>
+                <tbody id="attendanceTbody"><tr><td colspan="6" style="text-align:center;">Loading...</td></tr></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="tab-results" class="admin-tab-content">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+            <h3 style="margin:0;color:var(--text-primary);">Result Records</h3>
+            <button class="btn-add" onclick="loadResults()"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
+        </div>
+        <div class="table-container">
+            <table class="admin-table">
+                <thead><tr><th>Student</th><th>Subject</th><th>Exam Type</th><th>Marks</th><th>Grade</th><th>Actions</th></tr></thead>
+                <tbody id="resultsTbody"><tr><td colspan="6" style="text-align:center;">Loading...</td></tr></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="tab-events" class="admin-tab-content">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+            <h3 style="margin:0;color:var(--text-primary);">Events Management</h3>
+            <button class="btn-add" onclick="loadEvents()"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
+        </div>
+        <div class="table-container">
+            <table class="admin-table">
+                <thead><tr><th>Title</th><th>Date</th><th>Location</th><th>Category</th><th>Status</th><th>Actions</th></tr></thead>
+                <tbody id="eventsTbody"><tr><td colspan="6" style="text-align:center;">Loading...</td></tr></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="tab-library" class="admin-tab-content">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+            <h3 style="margin:0;color:var(--text-primary);">Library Books</h3>
+            <button class="btn-add" onclick="loadBooks()"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
+        </div>
+        <div class="table-container">
+            <table class="admin-table">
+                <thead><tr><th>Title</th><th>Author</th><th>ISBN</th><th>Total</th><th>Available</th><th>Actions</th></tr></thead>
+                <tbody id="booksTbody"><tr><td colspan="6" style="text-align:center;">Loading...</td></tr></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="tab-fees" class="admin-tab-content">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+            <h3 style="margin:0;color:var(--text-primary);">Fee Records</h3>
+            <button class="btn-add" onclick="loadFees()"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
+        </div>
+        <div class="table-container">
+            <table class="admin-table">
+                <thead><tr><th>Student</th><th>Fee Type</th><th>Amount</th><th>Due Date</th><th>Status</th><th>Actions</th></tr></thead>
+                <tbody id="feesTbody"><tr><td colspan="6" style="text-align:center;">Loading...</td></tr></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="tab-exams" class="admin-tab-content">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+            <h3 style="margin:0;color:var(--text-primary);">Examinations</h3>
+            <button class="btn-add" onclick="loadExams()"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
+        </div>
+        <div class="table-container">
+            <table class="admin-table">
+                <thead><tr><th>Subject</th><th>Type</th><th>Date</th><th>Time</th><th>Room</th><th>Actions</th></tr></thead>
+                <tbody id="examsTbody"><tr><td colspan="6" style="text-align:center;">Loading...</td></tr></tbody>
+            </table>
+        </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Modal Container (Dynamically populated by JS) -->
+<div class="modal-overlay" id="adminModal">
+    <div class="modal-card">
+        <button class="modal-close" onclick="closeAdminModal()"><i class="fa-solid fa-xmark"></i></button>
+        <div class="modal-title" id="adminModalTitle">Edit Record</div>
+        <form id="adminModalForm" onsubmit="submitAdminForm(event)">
+            <div id="adminModalBody" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+                <!-- Fields injected here -->
+            </div>
+            <button type="submit" class="modal-submit" style="margin-top:24px;">Save Changes</button>
+        </form>
+    </div>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script th:src="@{/js/admin-panel.js}"></script>
+<script>
+  // UI Interactions
+  const sidebarEl = document.getElementById('sidebar');
+  const overlayEl = document.getElementById('sidebarOverlay');
+  document.getElementById('sidebarToggle').addEventListener('click',()=>{sidebarEl.classList.toggle('open');overlayEl.style.display=sidebarEl.classList.contains('open')?'block':'none';});
+  function closeSidebar(){sidebarEl.classList.remove('open');overlayEl.style.display='none';}
+
+  const accountBtn=document.getElementById('accountMenuBtn'),accountDropdown=document.getElementById('accountDropdown');
+  accountBtn.addEventListener('click',e=>{e.stopPropagation();accountDropdown.style.display=accountDropdown.style.display==='none'?'block':'none';});
+  document.addEventListener('click',()=>{accountDropdown.style.display='none';});
+
+  const darkBtn=document.getElementById('darkToggleBtn');
+  function applyDark(on){document.body.classList.toggle('dark-mode-dash',on);darkBtn.querySelector('i').className=on?'fa-solid fa-sun':'fa-solid fa-circle-half-stroke';}
+  darkBtn.addEventListener('click',()=>{const on=!document.body.classList.contains('dark-mode-dash');applyDark(on);localStorage.setItem('darkMode',on);});
+  if(localStorage.getItem('darkMode')==='true')applyDark(true);
+
+  // Tab switching
+  document.querySelectorAll('.admin-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+          document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+          document.querySelectorAll('.admin-tab-content').forEach(c => c.classList.remove('active'));
+          tab.classList.add('active');
+          const target = tab.getAttribute('data-target');
+          document.getElementById(target).classList.add('active');
+          
+          // Trigger load function based on tab
+          if(target === 'tab-dashboard') loadStats();
+          else if(target === 'tab-students') loadStudents();
+          else if(target === 'tab-attendance') loadAttendance();
+          else if(target === 'tab-results') loadResults();
+          else if(target === 'tab-events') loadEvents();
+          else if(target === 'tab-library') loadBooks();
+          else if(target === 'tab-fees') loadFees();
+          else if(target === 'tab-exams') loadExams();
+      });
+  });
+</script>
+</body>
+</html>

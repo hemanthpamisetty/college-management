@@ -18,7 +18,20 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable()) // Disable CSRF for simplicity in this demo, though not recommended for production
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/", "/login", "/register", "/css/**", "/images/**", "/js/**", "/api/auth/**").permitAll()
+                .requestMatchers("/uploads/**").authenticated()
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/api/students/*/documents/upload").hasRole("ADMIN")
+                .requestMatchers("/api/documents/*/download").authenticated()
                 .requestMatchers("/api/timetable/**").authenticated()
+                .requestMatchers("/api/attendance/**").authenticated()
+                .requestMatchers("/api/results/**").authenticated()
+                .requestMatchers("/api/examinations/**").authenticated()
+                .requestMatchers("/api/events/**").authenticated()
+                .requestMatchers("/api/library/**").authenticated()
+                .requestMatchers("/api/fees/**").authenticated()
+                .requestMatchers("/api/students/**").authenticated()
+                .requestMatchers("/api/documents/**").authenticated()
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form

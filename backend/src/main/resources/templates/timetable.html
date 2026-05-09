@@ -123,13 +123,17 @@
     <a th:href="@{/events}" class="nav-item" id="nav-events"><i class="fa-solid fa-calendar-star"></i> Events</a>
     <a th:href="@{/library}" class="nav-item" id="nav-library"><i class="fa-solid fa-book"></i> Library</a>
     <a th:href="@{/fees}" class="nav-item" id="nav-fees"><i class="fa-solid fa-receipt"></i> Fee Portal</a>
+    <div th:if="${isAdmin}">
+      <div class="nav-group-title">Admin</div>
+      <a th:href="@{/admin/students}" class="nav-item" id="nav-admin-students"><i class="fa-solid fa-users-gear"></i> Student Management <span class="nav-badge" style="background:#ef4444;">Admin</span></a>
+    </div>
   </nav>
   <div class="sidebar-footer">
     <div class="sidebar-user">
-      <div class="sidebar-avatar" th:text="${#authentication.name.substring(0,1).toUpperCase()}">S</div>
+      <div class="sidebar-avatar" th:text="${userName != null ? userName.substring(0,1).toUpperCase() : 'U'}">S</div>
       <div class="sidebar-user-info">
-        <div class="sidebar-user-name" th:text="${#authentication.name}">Student</div>
-        <div class="sidebar-user-role">Student</div>
+        <div class="sidebar-user-name" th:text="${userName}">User</div>
+        <div class="sidebar-user-role" th:text="${userRoleDisplay}">Student</div>
       </div>
       <i class="fa-solid fa-ellipsis-vertical" style="color:rgba(255,255,255,.4);font-size:14px;"></i>
     </div>
@@ -150,7 +154,7 @@
     <div class="topbar-right">
       <button class="topbar-icon-btn" onclick="window.print()"><i class="fa-solid fa-print"></i></button>
       <button class="topbar-icon-btn" id="darkToggleBtn"><i class="fa-solid fa-circle-half-stroke"></i></button>
-      <div class="topbar-avatar" th:text="${#authentication.name.substring(0,1).toUpperCase()}">S</div>
+      <div class="topbar-avatar" th:text="${userName != null ? userName.substring(0,1).toUpperCase() : 'U'}">S</div>
       <div style="position:relative;">
         <button class="topbar-icon-btn" id="accountMenuBtn"><i class="fa-solid fa-chevron-down"></i></button>
         <div id="accountDropdown" style="display:none;position:absolute;right:0;top:calc(100% + 8px);background:#fff;border:1px solid rgba(79,70,229,.12);border-radius:14px;padding:8px;min-width:200px;box-shadow:0 20px 60px rgba(0,0,0,.12);z-index:300;">

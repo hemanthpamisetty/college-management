@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="RGMCET Admin — Student Management Panel">
+  <title>Student Management — RGMCET Admin</title>
+  <link rel="icon" th:href="@{/images/clglogo.png}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" th:href="@{/css/dashbord.css}">
+  <style>
+    .admin-content { max-width: 1200px; margin: 0 auto; }
+    .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
+    .admin-header h2 { font-size: 22px; font-weight: 700; color: #0f172a; margin: 0; }
+    .filter-bar { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
+    .filter-bar input, .filter-bar select {
+      padding: 10px 16px; border-radius: 12px; border: 1.5px solid #e2e8f0;
+      font-size: 14px; font-family: 'Inter', sans-serif; background: #fff;
+      transition: border-color .2s; outline: none; min-width: 180px;
+    }
+    .filter-bar input:focus, .filter-bar select:focus { border-color: #4F46E5; }
+    .students-table { width: 100%; border-collapse: separate; border-spacing: 0; border-radius: 16px; overflow: hidden; background: #fff; box-shadow: 0 4px 24px rgba(0,0,0,.06); }
+    .students-table th { background: linear-gradient(135deg, #4F46E5, #06B6D4); color: #fff; padding: 14px 16px; text-align: left; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; }
+    .students-table td { padding: 14px 16px; border-bottom: 1px solid #f1f5f9; font-size: 14px; color: #334155; }
+    .students-table tr:hover td { background: #f8fafc; }
+    .students-table tr:last-child td { border-bottom: none; }
+    .badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+    .badge-dept { background: #e0e7ff; color: #4338ca; }
+    .btn-sm { padding: 8px 16px; border-radius: 10px; border: none; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .2s; font-family: 'Inter', sans-serif; }
+    .btn-view { background: #e0e7ff; color: #4338ca; }
+    .btn-view:hover { background: #4338ca; color: #fff; }
+    .btn-upload { background: #d1fae5; color: #065f46; }
+    .btn-upload:hover { background: #065f46; color: #fff; }
+    .btn-primary { background: linear-gradient(135deg, #4F46E5, #06B6D4); color: #fff; padding: 10px 20px; border-radius: 12px; border: none; font-size: 14px; font-weight: 600; cursor: pointer; }
+    .btn-danger { background: #fee2e2; color: #dc2626; }
+    .btn-danger:hover { background: #dc2626; color: #fff; }
+
+    /* Modal */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 1000; justify-content: center; align-items: center; }
+    .modal-overlay.active { display: flex; }
+    .modal { background: #fff; border-radius: 20px; padding: 32px; max-width: 700px; width: 95%; max-height: 85vh; overflow-y: auto; box-shadow: 0 25px 80px rgba(0,0,0,.2); }
+    .modal-title { font-size: 20px; font-weight: 700; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+    .modal-close { background: none; border: none; font-size: 22px; cursor: pointer; color: #94a3b8; padding: 4px; }
+    .modal-close:hover { color: #0f172a; }
+
+    /* Upload area */
+    .upload-zone { border: 2px dashed #cbd5e1; border-radius: 16px; padding: 40px 20px; text-align: center; cursor: pointer; transition: all .3s; margin: 16px 0; }
+    .upload-zone:hover, .upload-zone.dragover { border-color: #4F46E5; background: #f5f3ff; }
+    .upload-zone i { font-size: 40px; color: #4F46E5; margin-bottom: 12px; }
+    .upload-zone p { color: #64748b; font-size: 14px; margin: 4px 0; }
+
+    .doc-list { margin-top: 16px; }
+    .doc-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-radius: 12px; background: #f8fafc; margin-bottom: 8px; }
+    .doc-item-info { display: flex; align-items: center; gap: 12px; }
+    .doc-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    .doc-icon.img { background: #dbeafe; color: #2563eb; }
+    .doc-icon.pdf { background: #fee2e2; color: #dc2626; }
+    .doc-icon.doc { background: #e0e7ff; color: #4338ca; }
+    .doc-actions { display: flex; gap: 8px; }
+    .student-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+    .info-item label { font-size: 12px; color: #94a3b8; font-weight: 500; text-transform: uppercase; letter-spacing: .5px; }
+    .info-item span { display: block; font-size: 15px; font-weight: 600; color: #1e293b; margin-top: 2px; }
+    .empty-state { text-align: center; padding: 40px; color: #94a3b8; }
+    .empty-state i { font-size: 48px; margin-bottom: 12px; }
+
+    .dark-mode-dash .admin-header h2 { color: #f1f5f9; }
+    .dark-mode-dash .filter-bar input, .dark-mode-dash .filter-bar select { background: #1e293b; border-color: #334155; color: #f1f5f9; }
+    .dark-mode-dash .students-table { background: #1e293b; }
+    .dark-mode-dash .students-table td { color: #cbd5e1; border-bottom-color: #334155; }
+    .dark-mode-dash .students-table tr:hover td { background: #334155; }
+    .dark-mode-dash .modal { background: #1e293b; color: #f1f5f9; }
+    .dark-mode-dash .modal-title { color: #f1f5f9; }
+    .dark-mode-dash .doc-item { background: #0f172a; }
+    .dark-mode-dash .info-item span { color: #f1f5f9; }
+    .dark-mode-dash .upload-zone { border-color: #475569; }
+    .dark-mode-dash .upload-zone:hover { background: #1e293b; border-color: #4F46E5; }
+  </style>
+</head>
+<body>
+
+<!-- ===== SIDEBAR ===== -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <i class="fa-solid fa-graduation-cap" style="font-size:24px;color:#67e8f9;"></i>
+    <div class="sidebar-logo">RGM<span>CET</span></div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-group-title">Main</div>
+    <a th:href="@{/dashboard}" class="nav-item" id="nav-dashboard">
+      <i class="fa-solid fa-house"></i> Dashboard
+    </a>
+    <a th:href="@{/departments}" class="nav-item" id="nav-departments">
+      <i class="fa-solid fa-building-columns"></i> Departments
+    </a>
+    <div class="nav-group-title">Admin</div>
+    <a th:href="@{/admin/students}" class="nav-item active" id="nav-admin-students">
+      <i class="fa-solid fa-users-gear"></i> Student Management
+      <span class="nav-badge" style="background:#ef4444;">Admin</span>
+    </a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-user">
+      <div class="sidebar-avatar" th:text="${userName != null ? userName.substring(0,1).toUpperCase() : 'A'}">A</div>
+      <div class="sidebar-user-info">
+        <div class="sidebar-user-name" th:text="${userName}">Admin</div>
+        <div class="sidebar-user-role" th:text="${userRoleDisplay}">Administrator</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<div id="sidebarOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:199;" onclick="closeSidebar()"></div>
+
+<!-- ===== MAIN ===== -->
+<div class="main">
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar"><i class="fa-solid fa-bars"></i></button>
+      <div>
+        <div class="topbar-title">Student Management</div>
+        <div class="topbar-sub">Manage student profiles, documents & uploads</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <button class="topbar-icon-btn" id="darkToggleBtn" title="Dark mode"><i class="fa-solid fa-circle-half-stroke"></i></button>
+      <div style="display:flex;align-items:center;gap:8px;padding:0 4px;">
+        <div class="topbar-avatar" th:text="${userName != null ? userName.substring(0,1).toUpperCase() : 'A'}">A</div>
+        <div>
+          <div class="topbar-user-name" th:text="${userName}">Admin</div>
+          <div class="topbar-user-role" th:text="${userRoleDisplay}">Administrator</div>
+        </div>
+      </div>
+      <div style="position:relative;">
+        <button class="topbar-icon-btn" id="accountMenuBtn"><i class="fa-solid fa-chevron-down"></i></button>
+        <div id="accountDropdown" style="display:none;position:absolute;right:0;top:calc(100% + 8px);background:#fff;border:1px solid rgba(79,70,229,.12);border-radius:14px;padding:8px;min-width:200px;box-shadow:0 20px 60px rgba(0,0,0,.12);z-index:300;">
+          <a th:href="@{/dashboard}" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;color:#0f172a;font-size:14px;font-weight:500;text-decoration:none;" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='none'">
+            <i class="fa-solid fa-house" style="color:#4F46E5;width:18px;"></i> Dashboard
+          </a>
+          <hr style="border:none;border-top:1px solid #f1f5f9;margin:6px 0;">
+          <form th:action="@{/logout}" method="POST" id="logoutForm" style="display:none;"></form>
+          <a href="javascript:void(0)" onclick="document.getElementById('logoutForm').submit()" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;color:#ef4444;font-size:14px;font-weight:500;text-decoration:none;" onmouseover="this.style.background='#fef2f2'" onmouseout="this.style.background='none'">
+            <i class="fa-solid fa-arrow-right-from-bracket" style="width:18px;"></i> Logout
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-body">
+    <div class="admin-content">
+
+      <div class="admin-header">
+        <h2><i class="fa-solid fa-users-gear" style="color:#4F46E5;margin-right:10px;"></i>Student Management</h2>
+        <div style="font-size:14px;color:#64748b;" id="studentCount">Loading...</div>
+      </div>
+
+      <!-- Filters -->
+      <div class="filter-bar">
+        <input type="text" id="searchInput" placeholder="🔍  Search by name, email, or reg. no...">
+        <select id="deptFilter">
+          <option value="">All Departments</option>
+          <option value="CSE">CSE</option>
+          <option value="ECE">ECE</option>
+          <option value="MECH">MECH</option>
+          <option value="CIVIL">CIVIL</option>
+          <option value="EEE">EEE</option>
+        </select>
+        <select id="semFilter">
+          <option value="">All Semesters</option>
+          <option value="1">Semester 1</option>
+          <option value="2">Semester 2</option>
+          <option value="3">Semester 3</option>
+          <option value="4">Semester 4</option>
+          <option value="5">Semester 5</option>
+          <option value="6">Semester 6</option>
+          <option value="7">Semester 7</option>
+          <option value="8">Semester 8</option>
+        </select>
+      </div>
+
+      <!-- Students Table -->
+      <table class="students-table" id="studentsTable">
+        <thead>
+          <tr>
+            <th>Student</th>
+            <th>Reg. No</th>
+            <th>Department</th>
+            <th>Sem</th>
+            <th>Section</th>
+            <th>Docs</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="studentsBody">
+          <tr><td colspan="7" style="text-align:center;padding:40px;color:#94a3b8;">Loading students...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<!-- Student Detail Modal -->
+<div class="modal-overlay" id="studentModal">
+  <div class="modal">
+    <div class="modal-title">
+      <span id="modalStudentName">Student Details</span>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+    </div>
+
+    <div class="student-info-grid" id="studentInfoGrid"></div>
+
+    <h3 style="font-size:16px;font-weight:700;margin:20px 0 12px;display:flex;align-items:center;gap:8px;">
+      <i class="fa-solid fa-cloud-arrow-up" style="color:#4F46E5;"></i> Upload Document
+    </h3>
+
+    <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+      <i class="fa-solid fa-cloud-arrow-up"></i>
+      <p><strong>Click or drag files here</strong></p>
+      <p>JPEG, PNG, PDF, DOC — Max 10MB</p>
+    </div>
+    <input type="file" id="fileInput" style="display:none" accept=".jpg,.jpeg,.png,.gif,.webp,.pdf,.doc,.docx">
+    <input type="text" id="fileDescription" placeholder="File description (optional)" style="width:100%;padding:10px 16px;border-radius:12px;border:1.5px solid #e2e8f0;font-size:14px;font-family:'Inter',sans-serif;margin-bottom:12px;box-sizing:border-box;">
+    <button class="btn-primary" id="uploadBtn" onclick="uploadFile()" style="width:100%;margin-bottom:20px;">
+      <i class="fa-solid fa-upload"></i> Upload Document
+    </button>
+    <div id="uploadStatus" style="display:none;padding:12px;border-radius:10px;margin-bottom:16px;font-size:14px;"></div>
+
+    <h3 style="font-size:16px;font-weight:700;margin:20px 0 12px;display:flex;align-items:center;gap:8px;">
+      <i class="fa-solid fa-folder-open" style="color:#06B6D4;"></i> Documents
+    </h3>
+    <div class="doc-list" id="docList">
+      <div class="empty-state"><i class="fa-solid fa-folder-open"></i><p>No documents yet</p></div>
+    </div>
+  </div>
+</div>
+
+<script>
+let currentStudentId = null;
+
+// ---- Sidebar toggle ----
+const sidebarEl = document.getElementById('sidebar');
+const overlayEl = document.getElementById('sidebarOverlay');
+document.getElementById('sidebarToggle').addEventListener('click', () => {
+  sidebarEl.classList.toggle('open');
+  overlayEl.style.display = sidebarEl.classList.contains('open') ? 'block' : 'none';
+});
+function closeSidebar() { sidebarEl.classList.remove('open'); overlayEl.style.display = 'none'; }
+
+// ---- Dark mode ----
+const darkBtn = document.getElementById('darkToggleBtn');
+function applyDark(on) {
+  document.body.classList.toggle('dark-mode-dash', on);
+  darkBtn.querySelector('i').className = on ? 'fa-solid fa-sun' : 'fa-solid fa-circle-half-stroke';
+}
+darkBtn.addEventListener('click', () => { const on = !document.body.classList.contains('dark-mode-dash'); applyDark(on); localStorage.setItem('darkMode', on); });
+if (localStorage.getItem('darkMode') === 'true') applyDark(true);
+
+// ---- Account dropdown ----
+const accountBtn = document.getElementById('accountMenuBtn');
+const accountDropdown = document.getElementById('accountDropdown');
+accountBtn.addEventListener('click', (e) => { e.stopPropagation(); accountDropdown.style.display = accountDropdown.style.display === 'none' ? 'block' : 'none'; });
+document.addEventListener('click', () => { accountDropdown.style.display = 'none'; });
+
+// ---- Load Students ----
+async function loadStudents() {
+  const search = document.getElementById('searchInput').value;
+  const dept = document.getElementById('deptFilter').value;
+  const sem = document.getElementById('semFilter').value;
+
+  let url = '/api/admin/students?';
+  if (search) url += 'search=' + encodeURIComponent(search) + '&';
+  if (dept) url += 'department=' + encodeURIComponent(dept) + '&';
+  if (sem) url += 'semester=' + sem + '&';
+
+  try {
+    const res = await fetch(url);
+    const json = await res.json();
+    const students = json.data || [];
+    document.getElementById('studentCount').textContent = students.length + ' students found';
+
+    const tbody = document.getElementById('studentsBody');
+    if (students.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" class="empty-state"><i class="fa-solid fa-user-slash"></i><p>No students found</p></td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = students.map(s => `
+      <tr>
+        <td><div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#4F46E5,#06B6D4);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;">${(s.name||'?').charAt(0).toUpperCase()}</div>
+          <div><div style="font-weight:600;color:#1e293b;">${s.name}</div><div style="font-size:12px;color:#94a3b8;">${s.email}</div></div>
+        </div></td>
+        <td style="font-weight:600;">${s.registrationNumber || '—'}</td>
+        <td><span class="badge badge-dept">${s.department || '—'}</span></td>
+        <td>${s.semester || '—'}</td>
+        <td>${s.section || '—'}</td>
+        <td><span style="font-weight:600;">${s.documentCount || 0}</span></td>
+        <td>
+          <button class="btn-sm btn-view" onclick="viewStudent(${s.id})"><i class="fa-solid fa-eye"></i> View</button>
+          <button class="btn-sm btn-upload" onclick="viewStudent(${s.id})"><i class="fa-solid fa-upload"></i> Upload</button>
+        </td>
+      </tr>
+    `).join('');
+  } catch (err) {
+    console.error('Error loading students:', err);
+  }
+}
+
+// ---- View Student Detail ----
+async function viewStudent(id) {
+  currentStudentId = id;
+  try {
+    const res = await fetch('/api/admin/students/' + id);
+    const json = await res.json();
+    const s = json.data;
+
+    document.getElementById('modalStudentName').textContent = s.name;
+    document.getElementById('studentInfoGrid').innerHTML = `
+      <div class="info-item"><label>Name</label><span>${s.name}</span></div>
+      <div class="info-item"><label>Email</label><span>${s.email}</span></div>
+      <div class="info-item"><label>Registration No.</label><span>${s.registrationNumber || '—'}</span></div>
+      <div class="info-item"><label>Department</label><span>${s.department || '—'}</span></div>
+      <div class="info-item"><label>Semester</label><span>${s.semester || '—'}</span></div>
+      <div class="info-item"><label>Section</label><span>${s.section || '—'}</span></div>
+    `;
+
+    renderDocuments(s.documents || []);
+    document.getElementById('studentModal').classList.add('active');
+  } catch (err) { console.error('Error:', err); }
+}
+
+function renderDocuments(docs) {
+  const docList = document.getElementById('docList');
+  if (docs.length === 0) {
+    docList.innerHTML = '<div class="empty-state"><i class="fa-solid fa-folder-open"></i><p>No documents uploaded yet</p></div>';
+    return;
+  }
+  docList.innerHTML = docs.map(d => {
+    const iconClass = d.fileType === 'IMAGE' ? 'img' : d.fileType === 'PDF' ? 'pdf' : 'doc';
+    const iconName = d.fileType === 'IMAGE' ? 'fa-image' : d.fileType === 'PDF' ? 'fa-file-pdf' : 'fa-file-word';
+    const sizeKB = d.fileSize ? (d.fileSize / 1024).toFixed(1) + ' KB' : '';
+    return `
+      <div class="doc-item">
+        <div class="doc-item-info">
+          <div class="doc-icon ${iconClass}"><i class="fa-solid ${iconName}"></i></div>
+          <div>
+            <div style="font-weight:600;font-size:14px;">${d.originalFileName}</div>
+            <div style="font-size:12px;color:#94a3b8;">${d.description || ''} — ${sizeKB}</div>
+          </div>
+        </div>
+        <div class="doc-actions">
+          <a href="${d.downloadUrl}" class="btn-sm btn-view" style="text-decoration:none;"><i class="fa-solid fa-download"></i></a>
+          <button class="btn-sm btn-danger" onclick="deleteDoc(${d.id})"><i class="fa-solid fa-trash"></i></button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// ---- Upload ----
+const uploadZone = document.getElementById('uploadZone');
+const fileInput = document.getElementById('fileInput');
+
+['dragenter','dragover'].forEach(e => uploadZone.addEventListener(e, ev => { ev.preventDefault(); uploadZone.classList.add('dragover'); }));
+['dragleave','drop'].forEach(e => uploadZone.addEventListener(e, ev => { ev.preventDefault(); uploadZone.classList.remove('dragover'); }));
+uploadZone.addEventListener('drop', ev => { fileInput.files = ev.dataTransfer.files; showFileName(); });
+fileInput.addEventListener('change', showFileName);
+
+function showFileName() {
+  if (fileInput.files.length > 0) {
+    uploadZone.innerHTML = `<i class="fa-solid fa-check-circle" style="color:#10b981;"></i><p><strong>${fileInput.files[0].name}</strong></p><p>${(fileInput.files[0].size / 1024).toFixed(1)} KB</p>`;
+  }
+}
+
+async function uploadFile() {
+  if (!fileInput.files.length) { showStatus('Please select a file first', 'error'); return; }
+  if (!currentStudentId) return;
+
+  const formData = new FormData();
+  formData.append('file', fileInput.files[0]);
+  formData.append('description', document.getElementById('fileDescription').value || '');
+
+  const btn = document.getElementById('uploadBtn');
+  btn.disabled = true; btn.textContent = 'Uploading...';
+
+  try {
+    const res = await fetch('/api/students/' + currentStudentId + '/documents/upload', { method: 'POST', body: formData });
+    const json = await res.json();
+    if (json.success) {
+      showStatus('Document uploaded successfully!', 'success');
+      fileInput.value = ''; document.getElementById('fileDescription').value = '';
+      uploadZone.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i><p><strong>Click or drag files here</strong></p><p>JPEG, PNG, PDF, DOC — Max 10MB</p>';
+      viewStudent(currentStudentId);
+      loadStudents();
+    } else {
+      showStatus(json.message || 'Upload failed', 'error');
+    }
+  } catch (err) { showStatus('Upload failed: ' + err.message, 'error'); }
+  finally { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-upload"></i> Upload Document'; }
+}
+
+async function deleteDoc(docId) {
+  if (!confirm('Delete this document?')) return;
+  try {
+    await fetch('/api/documents/' + docId, { method: 'DELETE' });
+    viewStudent(currentStudentId);
+    loadStudents();
+  } catch (err) { console.error('Delete error:', err); }
+}
+
+function showStatus(msg, type) {
+  const el = document.getElementById('uploadStatus');
+  el.style.display = 'block';
+  el.style.background = type === 'success' ? '#d1fae5' : '#fee2e2';
+  el.style.color = type === 'success' ? '#065f46' : '#dc2626';
+  el.textContent = msg;
+  setTimeout(() => { el.style.display = 'none'; }, 4000);
+}
+
+function closeModal() { document.getElementById('studentModal').classList.remove('active'); }
+document.getElementById('studentModal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+
+// ---- Filters ----
+document.getElementById('searchInput').addEventListener('input', debounce(loadStudents, 300));
+document.getElementById('deptFilter').addEventListener('change', loadStudents);
+document.getElementById('semFilter').addEventListener('change', loadStudents);
+
+function debounce(fn, ms) { let t; return function(...a) { clearTimeout(t); t = setTimeout(() => fn.apply(this, a), ms); }; }
+
+// ---- Init ----
+loadStudents();
+</script>
+</body>
+</html>

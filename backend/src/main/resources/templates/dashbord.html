@@ -57,14 +57,22 @@
     <a th:href="@{/fees}" class="nav-item" id="nav-fees">
       <i class="fa-solid fa-receipt"></i> Fee Portal
     </a>
+
+    <div th:if="${isAdmin}">
+      <div class="nav-group-title">Admin</div>
+      <a th:href="@{/admin/students}" class="nav-item" id="nav-admin-students">
+        <i class="fa-solid fa-users-gear"></i> Student Management
+        <span class="nav-badge" style="background:#ef4444;">Admin</span>
+      </a>
+    </div>
   </nav>
 
   <div class="sidebar-footer">
     <div class="sidebar-user" id="sidebar-user-btn">
-      <div class="sidebar-avatar" id="userAvatarSidebar" th:text="${#authentication.name.substring(0,1).toUpperCase()}">S</div>
+      <div class="sidebar-avatar" id="userAvatarSidebar" th:text="${userName != null ? userName.substring(0,1).toUpperCase() : 'U'}">S</div>
       <div class="sidebar-user-info">
-        <div class="sidebar-user-name" id="sidebarUserName" th:text="${#authentication.name}">Student</div>
-        <div class="sidebar-user-role">Student</div>
+        <div class="sidebar-user-name" id="sidebarUserName" th:text="${userName}">User</div>
+        <div class="sidebar-user-role" th:text="${userRoleDisplay}">Student</div>
       </div>
       <i class="fa-solid fa-ellipsis-vertical" style="color:rgba(255,255,255,.4);font-size:14px;"></i>
     </div>
@@ -86,7 +94,7 @@
       </button>
       <div>
         <div class="topbar-title" id="topbarTitle">Dashboard</div>
-        <div class="topbar-sub">Welcome back, <span id="topbarStudent" th:text="${#authentication.name}">Student</span>!</div>
+        <div class="topbar-sub">Welcome back, <span id="topbarStudent" th:text="${userName}">User</span>!</div>
       </div>
     </div>
     <div class="topbar-right">
@@ -101,10 +109,10 @@
         <i class="fa-solid fa-circle-half-stroke"></i>
       </button>
       <div style="display:flex;align-items:center;gap:8px;padding:0 4px;">
-        <div class="topbar-avatar" id="userAvatarTop" th:text="${#authentication.name.substring(0,1).toUpperCase()}">S</div>
+        <div class="topbar-avatar" id="userAvatarTop" th:text="${userName != null ? userName.substring(0,1).toUpperCase() : 'U'}">S</div>
         <div>
-          <div class="topbar-user-name" id="topbarUserName" th:text="${#authentication.name}">Student</div>
-          <div class="topbar-user-role">Student</div>
+          <div class="topbar-user-name" id="topbarUserName" th:text="${userName}">User</div>
+          <div class="topbar-user-role" th:text="${userRoleDisplay}">Student</div>
         </div>
       </div>
       <!-- Account Dropdown -->
@@ -144,150 +152,351 @@
   <!-- Page Body -->
   <main class="page-body">
 
-    <!-- Welcome Banner -->
-    <div class="welcome-banner">
-      <div>
-        <h2>Good day, <span th:text="${#authentication.name}">Student</span>! 👋</h2>
-        <p>You have <strong>3 upcoming events</strong> and <strong>1 new notification</strong> waiting for you.</p>
+    <!-- =============================== -->
+    <!-- ===== ADMIN DASHBOARD VIEW ===== -->
+    <!-- =============================== -->
+    <div th:if="${isAdmin}">
+
+      <!-- Admin Welcome Banner -->
+      <div class="welcome-banner" style="background:linear-gradient(135deg,#1e1b4b 0%,#4338ca 50%,#06b6d4 100%);">
+        <div>
+          <h2 style="color:#fff;">Admin Control Panel 🛡️</h2>
+          <p style="color:rgba(255,255,255,.85);">Manage all college data. Changes you make here are delivered to <strong>all students</strong> instantly.</p>
+        </div>
+        <a th:href="@{/admin/students}" class="welcome-btn" style="background:rgba(255,255,255,.2);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.3);">
+          <i class="fa-solid fa-users-gear"></i> &nbsp;Manage Students
+        </a>
       </div>
-      <a th:href="@{/departments}" class="welcome-btn">
-        <i class="fa-solid fa-building-columns"></i> &nbsp;View Departments
-      </a>
+
+      <!-- Admin Live Stats -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-icon indigo"><i class="fa-solid fa-user-graduate"></i></div>
+          <div>
+            <div class="stat-value" th:text="${totalStudents}">0</div>
+            <div class="stat-label">Total Students</div>
+            <div class="stat-delta up"><i class="fa-solid fa-users"></i> Registered</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon cyan"><i class="fa-solid fa-clipboard-check"></i></div>
+          <div>
+            <div class="stat-value" th:text="${totalAttendance}">0</div>
+            <div class="stat-label">Attendance Records</div>
+            <div class="stat-delta up"><i class="fa-solid fa-check-circle"></i> Logged</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green"><i class="fa-solid fa-book"></i></div>
+          <div>
+            <div class="stat-value" th:text="${totalBooks}">0</div>
+            <div class="stat-label">Library Books</div>
+            <div class="stat-delta up"><i class="fa-solid fa-book-open"></i> In catalog</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon amber"><i class="fa-solid fa-calendar-check"></i></div>
+          <div>
+            <div class="stat-value" th:text="${totalEvents}">0</div>
+            <div class="stat-label">Total Events</div>
+            <div class="stat-delta" style="color:#f59e0b;"><i class="fa-solid fa-calendar"></i> Created</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Second row of stats -->
+      <div class="stats-row" style="margin-top:0;">
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(239,68,68,.12);"><i class="fa-solid fa-file-pen" style="color:#ef4444;"></i></div>
+          <div>
+            <div class="stat-value" th:text="${totalExams}">0</div>
+            <div class="stat-label">Examinations</div>
+            <div class="stat-delta" style="color:#ef4444;"><i class="fa-solid fa-clipboard"></i> Scheduled</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(168,85,247,.12);"><i class="fa-solid fa-receipt" style="color:#a855f7;"></i></div>
+          <div>
+            <div class="stat-value" th:text="${totalFees}">0</div>
+            <div class="stat-label">Fee Records</div>
+            <div class="stat-delta" style="color:#a855f7;"><i class="fa-solid fa-money-bill"></i> Entries</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(16,185,129,.12);"><i class="fa-solid fa-folder-open" style="color:#10b981;"></i></div>
+          <div>
+            <div class="stat-value" th:text="${totalDocuments}">0</div>
+            <div class="stat-label">Documents</div>
+            <div class="stat-delta up"><i class="fa-solid fa-upload"></i> Uploaded</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(14,165,233,.12);"><i class="fa-solid fa-chart-bar" style="color:#0ea5e9;"></i></div>
+          <div>
+            <div class="stat-value" th:text="${totalResults}">0</div>
+            <div class="stat-label">Results</div>
+            <div class="stat-delta" style="color:#0ea5e9;"><i class="fa-solid fa-star"></i> Published</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Admin Quick Access -->
+      <div class="section-label">Manage Modules</div>
+      <div class="quick-grid">
+        <a th:href="@{/admin/students}" class="quick-card" style="border:2px solid #ef4444;">
+          <div class="quick-icon" style="background:linear-gradient(135deg,#ef4444,#f97316);"><i class="fa-solid fa-users-gear" style="color:#fff;"></i></div>
+          <h4>Student Management</h4>
+          <p>View all students &amp; upload documents</p>
+        </a>
+        <a th:href="@{/departments}" class="quick-card">
+          <div class="quick-icon"><i class="fa-solid fa-building-columns"></i></div>
+          <h4>Departments</h4>
+          <p>Manage department details</p>
+        </a>
+        <a th:href="@{/timetable}" class="quick-card">
+          <div class="quick-icon"><i class="fa-solid fa-calendar-days"></i></div>
+          <h4>Timetable</h4>
+          <p>Create &amp; update class schedules</p>
+        </a>
+        <a th:href="@{/attendance}" class="quick-card">
+          <div class="quick-icon"><i class="fa-solid fa-clipboard-check"></i></div>
+          <h4>Attendance</h4>
+          <p>Mark &amp; manage attendance records</p>
+        </a>
+        <a th:href="@{/results}" class="quick-card">
+          <div class="quick-icon"><i class="fa-solid fa-chart-bar"></i></div>
+          <h4>Results</h4>
+          <p>Publish &amp; update student grades</p>
+        </a>
+        <a th:href="@{/examinations}" class="quick-card">
+          <div class="quick-icon"><i class="fa-solid fa-file-pen"></i></div>
+          <h4>Examinations</h4>
+          <p>Schedule &amp; manage exams</p>
+        </a>
+        <a th:href="@{/events}" class="quick-card">
+          <div class="quick-icon"><i class="fa-solid fa-calendar-star"></i></div>
+          <h4>Events</h4>
+          <p>Create &amp; manage campus events</p>
+        </a>
+        <a th:href="@{/library}" class="quick-card">
+          <div class="quick-icon"><i class="fa-solid fa-book"></i></div>
+          <h4>Library</h4>
+          <p>Manage books &amp; issue/returns</p>
+        </a>
+        <a th:href="@{/fees}" class="quick-card">
+          <div class="quick-icon"><i class="fa-solid fa-receipt"></i></div>
+          <h4>Fee Portal</h4>
+          <p>Manage student fee records</p>
+        </a>
+        <a th:href="@{/services}" class="quick-card">
+          <div class="quick-icon"><i class="fa-solid fa-grid-2"></i></div>
+          <h4>Services</h4>
+          <p>Manage college services</p>
+        </a>
+      </div>
+
+      <!-- Admin Activity -->
+      <div class="two-col">
+        <div class="dash-card">
+          <div class="dash-card-title"><i class="fa-solid fa-shield-halved" style="color:#4F46E5;margin-right:8px;"></i>Admin Actions</div>
+          <div class="activity-list">
+            <div class="activity-item">
+              <div class="activity-dot green"></div>
+              <div class="activity-text">Admin logged in successfully</div>
+              <div class="activity-time">Just now</div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot blue"></div>
+              <div class="activity-text">System initialized with sample data</div>
+              <div class="activity-time">On startup</div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot amber"></div>
+              <div class="activity-text">All modules are database-backed and live</div>
+              <div class="activity-time">Active</div>
+            </div>
+          </div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-title"><i class="fa-solid fa-bullhorn" style="color:#06B6D4;margin-right:8px;"></i>System Info</div>
+          <div class="activity-list">
+            <div class="activity-item">
+              <div class="activity-dot green"></div>
+              <div class="activity-text"><strong>Database</strong> — MySQL connected &amp; synced</div>
+              <div class="activity-time">Active</div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot green"></div>
+              <div class="activity-text"><strong>File Uploads</strong> — Storage initialized</div>
+              <div class="activity-time">Active</div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot green"></div>
+              <div class="activity-text"><strong>Security</strong> — Role-based access enabled</div>
+              <div class="activity-time">Active</div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot blue"></div>
+              <div class="activity-text"><strong>API</strong> — All REST endpoints operational</div>
+              <div class="activity-time">Active</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
 
-    <!-- Stat Cards -->
-    <div class="stats-row">
-      <div class="stat-card">
-        <div class="stat-icon indigo"><i class="fa-solid fa-book-open"></i></div>
-        <div>
-          <div class="stat-value">6</div>
-          <div class="stat-label">Active Courses</div>
-          <div class="stat-delta up"><i class="fa-solid fa-arrow-up"></i> +1 this semester</div>
-        </div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon cyan"><i class="fa-solid fa-clipboard-check"></i></div>
-        <div>
-          <div class="stat-value">87%</div>
-          <div class="stat-label">Attendance</div>
-          <div class="stat-delta up"><i class="fa-solid fa-arrow-up"></i> Above required 75%</div>
-        </div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon green"><i class="fa-solid fa-star"></i></div>
-        <div>
-          <div class="stat-value">8.4</div>
-          <div class="stat-label">Current CGPA</div>
-          <div class="stat-delta up"><i class="fa-solid fa-arrow-up"></i> +0.2 from last sem</div>
-        </div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon amber"><i class="fa-solid fa-calendar-check"></i></div>
-        <div>
-          <div class="stat-value">3</div>
-          <div class="stat-label">Upcoming Events</div>
-          <div class="stat-delta" style="color:#f59e0b;"><i class="fa-solid fa-calendar"></i> Next: May 12</div>
-        </div>
-      </div>
-    </div>
+    <!-- ================================= -->
+    <!-- ===== STUDENT DASHBOARD VIEW ===== -->
+    <!-- ================================= -->
+    <div th:if="${!isAdmin}">
 
-    <!-- Quick Actions -->
-    <div class="section-label">Quick Access</div>
-    <div class="quick-grid">
-      <a th:href="@{/departments}" class="quick-card">
-        <div class="quick-icon"><i class="fa-solid fa-building-columns"></i></div>
-        <h4>Departments</h4>
-        <p>Browse all academic branches</p>
-      </a>
-      <a th:href="@{/timetable}" class="quick-card">
-        <div class="quick-icon"><i class="fa-solid fa-calendar-days"></i></div>
-        <h4>Timetable</h4>
-        <p>View your class schedule</p>
-      </a>
-      <a th:href="@{/results}" class="quick-card">
-        <div class="quick-icon"><i class="fa-solid fa-chart-bar"></i></div>
-        <h4>Results</h4>
-        <p>Check semester grades</p>
-      </a>
-      <a th:href="@{/fees}" class="quick-card">
-        <div class="quick-icon"><i class="fa-solid fa-receipt"></i></div>
-        <h4>Fee Portal</h4>
-        <p>View &amp; pay college fees</p>
-      </a>
-      <a th:href="@{/examinations}" class="quick-card">
-        <div class="quick-icon"><i class="fa-solid fa-file-pen"></i></div>
-        <h4>Examinations</h4>
-        <p>Hall tickets &amp; schedules</p>
-      </a>
-      <a th:href="@{/library}" class="quick-card">
-        <div class="quick-icon"><i class="fa-solid fa-book"></i></div>
-        <h4>Library</h4>
-        <p>Search books &amp; e-resources</p>
-      </a>
-    </div>
+      <!-- Student Welcome Banner -->
+      <div class="welcome-banner">
+        <div>
+          <h2>Good day, <span th:text="${userName}">Student</span>! 👋</h2>
+          <p>You have <strong>3 upcoming events</strong> and <strong>1 new notification</strong> waiting for you.</p>
+        </div>
+        <a th:href="@{/departments}" class="welcome-btn">
+          <i class="fa-solid fa-building-columns"></i> &nbsp;View Departments
+        </a>
+      </div>
 
-    <!-- Two-column: Activity + Announcements -->
-    <div class="two-col">
-      <div class="dash-card">
-        <div class="dash-card-title"><i class="fa-solid fa-clock-rotate-left" style="color:#4F46E5;margin-right:8px;"></i>Recent Activity</div>
-        <div class="activity-list">
-          <div class="activity-item">
-            <div class="activity-dot green"></div>
-            <div class="activity-text">You logged in successfully</div>
-            <div class="activity-time">Just now</div>
+      <!-- Student Stat Cards -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-icon indigo"><i class="fa-solid fa-book-open"></i></div>
+          <div>
+            <div class="stat-value">6</div>
+            <div class="stat-label">Active Courses</div>
+            <div class="stat-delta up"><i class="fa-solid fa-arrow-up"></i> +1 this semester</div>
           </div>
-          <div class="activity-item">
-            <div class="activity-dot blue"></div>
-            <div class="activity-text">Attendance updated — Unit 3 submission</div>
-            <div class="activity-time">2h ago</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon cyan"><i class="fa-solid fa-clipboard-check"></i></div>
+          <div>
+            <div class="stat-value">87%</div>
+            <div class="stat-label">Attendance</div>
+            <div class="stat-delta up"><i class="fa-solid fa-arrow-up"></i> Above required 75%</div>
           </div>
-          <div class="activity-item">
-            <div class="activity-dot amber"></div>
-            <div class="activity-text">Exam schedule released for Semester IV</div>
-            <div class="activity-time">Yesterday</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green"><i class="fa-solid fa-star"></i></div>
+          <div>
+            <div class="stat-value">8.4</div>
+            <div class="stat-label">Current CGPA</div>
+            <div class="stat-delta up"><i class="fa-solid fa-arrow-up"></i> +0.2 from last sem</div>
           </div>
-          <div class="activity-item">
-            <div class="activity-dot green"></div>
-            <div class="activity-text">Mid-term result published — 82/100</div>
-            <div class="activity-time">3 days ago</div>
-          </div>
-          <div class="activity-item">
-            <div class="activity-dot blue"></div>
-            <div class="activity-text">Library book borrowed — Data Structures</div>
-            <div class="activity-time">5 days ago</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon amber"><i class="fa-solid fa-calendar-check"></i></div>
+          <div>
+            <div class="stat-value">3</div>
+            <div class="stat-label">Upcoming Events</div>
+            <div class="stat-delta" style="color:#f59e0b;"><i class="fa-solid fa-calendar"></i> Next: May 12</div>
           </div>
         </div>
       </div>
-      <div class="dash-card">
-        <div class="dash-card-title"><i class="fa-solid fa-bullhorn" style="color:#06B6D4;margin-right:8px;"></i>Announcements</div>
-        <div class="activity-list">
-          <div class="activity-item">
-            <div class="activity-dot blue"></div>
-            <div class="activity-text"><strong>Tech Fest 2026</strong> — Registrations open till May 8.</div>
-            <div class="activity-time">May 1</div>
+
+      <!-- Student Quick Actions -->
+      <div class="section-label">Quick Access</div>
+      <div class="quick-grid">
+        <a th:href="@{/departments}" class="quick-card">
+          <div class="quick-icon"><i class="fa-solid fa-building-columns"></i></div>
+          <h4>Departments</h4>
+          <p>Browse all academic branches</p>
+        </a>
+        <a th:href="@{/timetable}" class="quick-card">
+          <div class="quick-icon"><i class="fa-solid fa-calendar-days"></i></div>
+          <h4>Timetable</h4>
+          <p>View your class schedule</p>
+        </a>
+        <a th:href="@{/results}" class="quick-card">
+          <div class="quick-icon"><i class="fa-solid fa-chart-bar"></i></div>
+          <h4>Results</h4>
+          <p>Check semester grades</p>
+        </a>
+        <a th:href="@{/fees}" class="quick-card">
+          <div class="quick-icon"><i class="fa-solid fa-receipt"></i></div>
+          <h4>Fee Portal</h4>
+          <p>View &amp; pay college fees</p>
+        </a>
+        <a th:href="@{/examinations}" class="quick-card">
+          <div class="quick-icon"><i class="fa-solid fa-file-pen"></i></div>
+          <h4>Examinations</h4>
+          <p>Hall tickets &amp; schedules</p>
+        </a>
+        <a th:href="@{/library}" class="quick-card">
+          <div class="quick-icon"><i class="fa-solid fa-book"></i></div>
+          <h4>Library</h4>
+          <p>Search books &amp; e-resources</p>
+        </a>
+      </div>
+
+      <!-- Student Activity + Announcements -->
+      <div class="two-col">
+        <div class="dash-card">
+          <div class="dash-card-title"><i class="fa-solid fa-clock-rotate-left" style="color:#4F46E5;margin-right:8px;"></i>Recent Activity</div>
+          <div class="activity-list">
+            <div class="activity-item">
+              <div class="activity-dot green"></div>
+              <div class="activity-text">You logged in successfully</div>
+              <div class="activity-time">Just now</div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot blue"></div>
+              <div class="activity-text">Attendance updated — Unit 3 submission</div>
+              <div class="activity-time">2h ago</div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot amber"></div>
+              <div class="activity-text">Exam schedule released for Semester IV</div>
+              <div class="activity-time">Yesterday</div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot green"></div>
+              <div class="activity-text">Mid-term result published — 82/100</div>
+              <div class="activity-time">3 days ago</div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot blue"></div>
+              <div class="activity-text">Library book borrowed — Data Structures</div>
+              <div class="activity-time">5 days ago</div>
+            </div>
           </div>
-          <div class="activity-item">
-            <div class="activity-dot amber"></div>
-            <div class="activity-text"><strong>Semester End Exams</strong> begin June 20, 2026.</div>
-            <div class="activity-time">Apr 28</div>
-          </div>
-          <div class="activity-item">
-            <div class="activity-dot green"></div>
-            <div class="activity-text"><strong>Placement Drive</strong> — TCS &amp; Infosys on May 24.</div>
-            <div class="activity-time">Apr 25</div>
-          </div>
-          <div class="activity-item">
-            <div class="activity-dot blue"></div>
-            <div class="activity-text"><strong>Holiday</strong> — May 19 is declared a college holiday.</div>
-            <div class="activity-time">Apr 20</div>
-          </div>
-          <div class="activity-item">
-            <div class="activity-dot green"></div>
-            <div class="activity-text"><strong>Cultural Fest Utsav 2026</strong> — June 6–8.</div>
-            <div class="activity-time">Apr 18</div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-title"><i class="fa-solid fa-bullhorn" style="color:#06B6D4;margin-right:8px;"></i>Announcements</div>
+          <div class="activity-list">
+            <div class="activity-item">
+              <div class="activity-dot blue"></div>
+              <div class="activity-text"><strong>Tech Fest 2026</strong> — Registrations open till May 8.</div>
+              <div class="activity-time">May 1</div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot amber"></div>
+              <div class="activity-text"><strong>Semester End Exams</strong> begin June 20, 2026.</div>
+              <div class="activity-time">Apr 28</div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot green"></div>
+              <div class="activity-text"><strong>Placement Drive</strong> — TCS &amp; Infosys on May 24.</div>
+              <div class="activity-time">Apr 25</div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot blue"></div>
+              <div class="activity-text"><strong>Holiday</strong> — May 19 is declared a college holiday.</div>
+              <div class="activity-time">Apr 20</div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot green"></div>
+              <div class="activity-text"><strong>Cultural Fest Utsav 2026</strong> — June 6–8.</div>
+              <div class="activity-time">Apr 18</div>
+            </div>
           </div>
         </div>
       </div>
+
     </div>
 
   </main>
